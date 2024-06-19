@@ -1,0 +1,23 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.i2i.sma.models">
+
+    <class name = "Grade" table = "grades">
+        <id name = "id" column = "grade_id">
+            <generator class = "increment"/>
+        </id>
+
+        <property name = "standard" column = "standard" type = "integer"/>
+        <property name = "section" column = "section" type = "string"/>
+
+        <set name = "students" cascade = "all"  inverse = "true" fetch = "select">
+            <key column = "grade_id" not-null = "true"/>
+            <one-to-many class = "com.i2i.sma.models.Student" />
+        </set>
+
+        <set name = "teachers" table = "teacher_grade_association" fetch = "join" inverse = "true" cascade = "persist">
+            <key column = "grade_id" not-null = "true"/>
+            <many-to-many class = "com.i2i.sma.models.Teacher" column = "teacher_id"/>
+        </set>
+    </class>
+</hibernate-mapping>
