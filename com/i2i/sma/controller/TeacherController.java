@@ -14,8 +14,9 @@ import com.i2i.sma.utils.DataValidationUtil;
 
 /**
 * <p> 
-* This class is responsible for managing teacher records. It provides functionalities to create and add new teachers, assign them to 
-* specified grade and allocates a cabin, display all teachers recors, search for teachers and remove teachers.
+* This class is responsible for managing teacher records.
+* It provides functionalities to create and add new teachers, assign them to 
+* specified grade, allocates a cabin, display all teachers records, search teacher and remove teacher.
 * </p>
 */
 public class TeacherController {
@@ -97,8 +98,8 @@ public class TeacherController {
         try {
             List<Teacher> Details = teacherService.fetchTeachers();
             if (null != Details) {
-                for (Teacher i : Details) {
-                    System.out.println(i);
+                for (Teacher teacher : Details) {
+                    System.out.println(teacher);
                 }
             } else {
                 System.out.println("NO TEACHER DATA FOUND IN THE DATABASE");
@@ -111,7 +112,8 @@ public class TeacherController {
 
     /**
     * <p>
-    * This method handles searching of teacher's record.It prompts the user to enter the id of the teacher they wish to see the details of.
+    * This method handles searching of teacher's record.
+    * It prompts the user to enter the id of the teacher they wish to see the details.
     * After getting id from the user, it retrieves data and display it to the user.
     * If the user given wrong id, it displays a warning message.
     * For example: provide valid teacher id.
@@ -148,7 +150,9 @@ public class TeacherController {
         System.out.println("Enter the ID to delete: ");
         int id = scanner.nextInt();
         try {
-            System.out.println((teacherService.deleteTeacher(id)) ? "\nTEACHER ID " + id + " IS REMOVED SUCCESSFULLY ALONG WITH THEIR ASSOCIATED CABIN." : "\nERROR WHILE DELETING TEACHER ID " + id + "\nPLEASE CHECK THE TEACHER ID PROPERLY");
+            System.out.println((teacherService.isDeleteTeacher(id)) ? "\nTEACHER ID "
+            + id + " IS REMOVED SUCCESSFULLY ALONG WITH THEIR ASSOCIATED CABIN." 
+            : "\nERROR WHILE DELETING TEACHER ID " + id + "\nPLEASE CHECK THE TEACHER ID PROPERLY");
         } catch (SchoolManagementException e) { 
             System.out.println(e.getMessage());
         }

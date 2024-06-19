@@ -57,8 +57,8 @@ public class StudentDao {
         List<Student> students = null; 
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
             students = session.createQuery("FROM Student", Student.class).list();
-            for(Student st : students) { 
-                Hibernate.initialize(st.getGrade());
+            for(Student student : students) { 
+                Hibernate.initialize(student.getGrade());
             }
             return students;
         } catch (HibernateException e) {
@@ -96,7 +96,7 @@ public class StudentDao {
     * @throws SchoolManagementException 
     *      this happens when something goes wrong during data removing.      
     */
-    public boolean removeStudent(int id) throws SchoolManagementException {
+    public boolean isRemoveStudent(int id) throws SchoolManagementException {
         Transaction transaction = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();

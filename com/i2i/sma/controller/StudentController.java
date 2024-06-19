@@ -13,8 +13,10 @@ import com.i2i.sma.utils.DataValidationUtil;
 
 /**
 * <p> 
-* This class is responsible for managing student records. It provides functionalities to create and add new students, assign them to 
-* specified standards and sections, display all students records, search for students and remove students.
+* This class is responsible for managing student records.
+* It provides functionalities to create and add new students, assign them to 
+* specified standards and sections, display all students records,
+* search for students and remove students.
 * </p>
 */
 public class StudentController {
@@ -23,12 +25,14 @@ public class StudentController {
 
     /**
     * <p>
-    * This method handles the add a new student record with the specified standard and section.
-    * It prompts the user to enter the student's name, date of birth (DOB), class standard, and section.
-    * After collecting the information from the user, it validates whether the input from user is in correct format.
+    * This method handles the add a new student record with the specified grade.
+    * It prompts the user to enter the student's name, date of birth (DOB), standard, and section.
+    * After collecting the information from the user, it validates
+    * whether the input from user is in correct format.
     * For example : checks whether entered name contains only alphabets,
     *               checks whether entered dob is in correct format etc.
-    * After validations, it adds the student to the database and assigns the specified standard and section to the student.
+    * After validations, it adds the student to the database and
+    * assigns the specified standard and section to the student.
     * Once the student is successfully added, it prints out the student's details and a success message.
     * </p>
     */
@@ -88,8 +92,8 @@ public class StudentController {
         try {
             List<Student> Details = studentService.fetchStudents();
             if (null != Details) {
-                for (Student i : Details) {
-                    System.out.println(i);
+                for (Student student : Details) {
+                    System.out.println(student);
                 }
             } else {
                 System.out.println("NO STUDENT DATA FOUND IN THE DATABASE");
@@ -101,7 +105,8 @@ public class StudentController {
 
     /**
     * <p>
-    * This method handles searching of students record.It prompts the user to enter the id of the student they wish to see the details of.
+    * This method handles searching of students record.
+    * It prompts the user to enter the student id they wish to see the details.
     * After getting id from the user, it retrieves data and display it to the user.
     * If the user given wrong id, it displays a warning message.
     * For example: provide valid student id.
@@ -125,7 +130,8 @@ public class StudentController {
 
     /**
     * <p>
-    * This method handles removing students from record.It prompts the user to enter the id of the student they wish to remove the details of.
+    * This method handles removing students from record.
+    * It prompts the user to enter the id of the student they wish to remove the details.
     * After getting id from the user, it deletes the particular data.
     * After removing, it displays a successful message.
     * If the user given wrong id, it displays a warning message.
@@ -136,7 +142,9 @@ public class StudentController {
         System.out.println("Enter the ID to delete: ");
         int id = scanner.nextInt();
         try {
-            System.out.println((studentService.deleteStudent(id)) ? "\nSTUDENT ID " + id + " REMOVED SUCCESSFULLY" : "\nERROR WHILE DELETING STUDENT ID " + id + "\nPLEASE CHECK THE STUDENT ID PROPERLY");
+            System.out.println((studentService.isDeleteStudent(id)) ? "\nSTUDENT ID " 
+            + id + " REMOVED SUCCESSFULLY" : "\nERROR WHILE DELETING STUDENT ID " 
+            + id + "\nPLEASE CHECK THE STUDENT ID PROPERLY");
         } catch (SchoolManagementException e) { 
              System.out.println(e.getMessage());
         } 

@@ -16,7 +16,8 @@ import com.i2i.sma.utils.DataValidationUtil;
 
 /**
 * <p> 
-* This class is responsible for managing grade records. It provides functionalities to create and add new grades, assign them to 
+* This class is responsible for managing grade records.
+* It provides functionalities to create and add new grades, assign them to 
 * specified students and teachers, display all grade records, search for grades and remove grades.
 * </p>
 */
@@ -34,8 +35,8 @@ public class GradeController {
         try {
             List<Grade> Details = gradeService.fetchGradeDetails();
             if (null != Details) {
-                for (Grade i : Details) {
-                    System.out.println(i);
+                for (Grade grade : Details) {
+                    System.out.println(grade);
                 }
             } else {
                 System.out.println("NO GRADES FOUND IN THE DATABASE");
@@ -47,8 +48,8 @@ public class GradeController {
 
     /**
     * <p>
-    * This method handles searching of Grade's specific standard and section record along with the students in it.
-    * It prompts the user to enter the id of the grade they wish to see the details of.
+    * This method handles searching of Grade's specific standard and section record
+    * along with the students. It prompts the user to enter the grade id they wish to see.
     * After getting id from the user, it retrieves data and display it to the user.
     * If the user given wrong id, it displays a warning message.
     * For example: provide valid grade id.
@@ -74,7 +75,7 @@ public class GradeController {
     /**
     * <p>
     * This method handles removing standard and section along with students who are assigned to it.
-    * It prompts the user to enter the standard and section of the Grade they wish to remove the details of.
+    * It prompts the user to enter grade id they wish to remove the details.
     * After getting the input, it deletes the particular data.
     * After removing, it displays a successful message.
     * If the user given wrong standard and section, it displays a warning message.
@@ -85,7 +86,9 @@ public class GradeController {
         System.out.println("Enter the grade ID to be deleted: ");
         int id = scanner.nextInt();
         try {
-            System.out.println((gradeService.deleteGrade(id)) ? "\nGRADE ID " + id + " IS REMOVED ALONG WITH THE STUDENTS PRESENT IN IT." : "\nERROR WHILE DELETING GRADE ID " + id + "\nPLEASE CHECK THE GRADE ID PROPERLY");
+            System.out.println((gradeService.isDeleteGrade(id)) ? "\nGRADE ID " 
+            + id + " IS REMOVED ALONG WITH THE STUDENTS PRESENT IN IT." 
+            : "\nERROR WHILE DELETING GRADE ID " + id + "\nPLEASE CHECK THE GRADE ID PROPERLY");
         } catch (SchoolManagementException e) { 
              System.out.println(e.getMessage());
         } 

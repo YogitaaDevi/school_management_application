@@ -131,7 +131,7 @@ public class TeacherService {
     * @throws SchoolManagementException 
     *      this occurs when anything went wrong while removing a data. 
     */
-    public boolean deleteTeacher(int id) throws SchoolManagementException {
-        return teacherDao.removeTeacher(id);
+    public boolean isDeleteTeacher(int id) throws SchoolManagementException {
+        return teacherDao.isRemoveTeacher(id);
     }
 }

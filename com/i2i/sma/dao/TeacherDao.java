@@ -102,7 +102,7 @@ public class TeacherDao {
     * @throws SchoolManagementException 
     *      this happens when something goes wrong during data removing.      
     */
-    public boolean removeTeacher(int id) throws SchoolManagementException {
+    public boolean isRemoveTeacher(int id) throws SchoolManagementException {
         Transaction transaction = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();

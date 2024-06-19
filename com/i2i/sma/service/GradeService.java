@@ -87,7 +87,7 @@ public class GradeService {
     * @throws SchoolManagementException 
     *      this occurs when anything went wrong while removing a data. 
     */
-    public boolean deleteGrade(int id) throws SchoolManagementException {
-        return gradeDao.removeGrade(id);
+    public boolean isDeleteGrade(int id) throws SchoolManagementException {
+        return gradeDao.isRemoveGrade(id);
     } 
 }

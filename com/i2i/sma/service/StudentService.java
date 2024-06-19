@@ -120,8 +120,8 @@ public class StudentService {
     * @throws SchoolManagementException
     *      this occurs when anything went wrong while removing a data. 
     */
-    public boolean deleteStudent(int id) throws SchoolManagementException {
-        return studentDao.removeStudent(id);
+    public boolean isDeleteStudent(int id) throws SchoolManagementException {
+        return studentDao.isRemoveStudent(id);
     }
 }
         

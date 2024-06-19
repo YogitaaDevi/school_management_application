@@ -136,7 +136,7 @@ public class GradeDao {
     * @throws SchoolManagementException 
     *      this occurs when anything went wrong while removing data.
     */
-    public boolean removeGrade(int id) throws SchoolManagementException {
+    public boolean isRemoveGrade(int id) throws SchoolManagementException {
         Transaction transaction = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();            
