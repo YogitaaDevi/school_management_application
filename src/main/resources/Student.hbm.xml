@@ -2,13 +2,15 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name = "com.i2i.sma.model.Student" table = "students">
+    <class name = "com.i2i.sma.models.Student" table = "students">
         <id name = "id" column = "id">
             <generator class = "increment"/>
         </id>
+
+        <many-to-one name = "grade" column = "grade_id" not-null = "true" lazy = "false" cascade = "persist" />
+
         <property name = "name" column = "name" type = "string" />
-        <property name = "fatherName" column = "father_name" type = "string" />
-        <property name = "motherName" column = "mother_name" type = "string" />   
+        <property name = "dob" column = "dob" type = "org.hibernate.type.LocalDateType" />        
     </class>
 </hibernate-mapping>
 

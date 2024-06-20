@@ -6,7 +6,7 @@
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/maven_sample_project</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/Student_Database</property>
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">Yogiravi_2003</property>
         <property name="hibernate.debug">true</property>
@@ -16,5 +16,8 @@
         <property name="hibernate.use_sql_comments">true</property>
 
         <mapping resource="Student.hbm.xml"/>
+        <mapping resource="Grade.hbm.xml"/>
+        <mapping resource="Teacher.hbm.xml"/>
+        <mapping resource="Cabin.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

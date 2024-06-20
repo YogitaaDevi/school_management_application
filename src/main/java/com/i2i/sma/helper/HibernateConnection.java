@@ -6,34 +6,20 @@ import org.hibernate.Transaction;
 
 /**
 *<p>
-* This HibernateConnection class is responsible for creating 
-* and managing the Hibernate SessionFactory.
+* This HibernateConnection class is responsible for creating and managing the Hibernate SessionFactory
+* to make our application interact with the database.
 *</p>
 */
 public class HibernateConnection {
-    private static final SessionFactory sessionFactory = new Configuration()
-                        .configure("hibernate.cfg.xml").buildSessionFactory();
+    private static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
-    /**
-    * <p>
-    * This method returns the sessionFactory inorder to connect with the database.
-    * </p>
-    * @return sessionFactory
-    */
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
-    /**
-    * <p>
-    * This method is responsible to close the transaction that opens at any write operations in the database.
-    * </p>
-    * @param transaction
-    *     transaction that opens at any write operations like create/update/delete.
-    */
     public static void rollbackTransaction(Transaction transaction) {
         try {
-            if (null != transaction) {
+            if (null != transaction || transaction.isActive()) {
                 transaction.rollback();
             }
         } catch(Exception e) {
