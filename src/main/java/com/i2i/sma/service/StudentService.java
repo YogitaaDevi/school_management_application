@@ -88,8 +88,7 @@ public class StudentService {
     *      this occurs when anything went wrong while retrieving data.
     */
     public List<Student> fetchStudents() throws SchoolManagementException {
-        List<Student> studentDetail = studentDao.getDetails();
-        return studentDetail;
+        return studentDao.getDetails();
     }
 
     /**
@@ -104,8 +103,7 @@ public class StudentService {
     *      this occurs when anything went wrong while searching a data.
     */
     public Student findStudent(int id) throws SchoolManagementException {
-        Student student = studentDao.findStudentById(id);
-        return student;
+        return studentDao.findStudentById(id);
     }
 
     /**
