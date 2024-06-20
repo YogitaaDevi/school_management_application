@@ -1,9 +1,9 @@
+import java.util.Scanner;
+
 import com.i2i.sma.controller.GradeController;
 import com.i2i.sma.controller.StudentController;
 import com.i2i.sma.controller.TeacherController;
 import com.i2i.sma.exception.SchoolManagementException;
-
-import java.util.Scanner;
 
 /**
 * <p> 
