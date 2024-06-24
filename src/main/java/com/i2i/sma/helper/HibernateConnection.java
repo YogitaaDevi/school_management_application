@@ -19,18 +19,12 @@ public class HibernateConnection {
         String url = dotenv.get("DATABASE_URL");
         String uname = dotenv.get("DATABASE_UNAME");
         String password = dotenv.get("DATABASE_PSW");
-        System.out.println("------------------saravana1");
         Configuration configuration = new Configuration().configure();
-        System.out.println("------------------saravana2");
-
         configuration.setProperty("hibernate.connection.url", url);
-        System.out.println("------------------saravana3");
 
         configuration.setProperty("hibernate.connection.username", uname);
-        System.out.println("------------------saravana4");
 
         configuration.setProperty("hibernate.connection.password", password);
-        System.out.println("------------------saravana5");
 
         sessionFactory = configuration.buildSessionFactory();
     }
