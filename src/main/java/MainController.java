@@ -3,6 +3,7 @@ import java.util.Scanner;
 import com.i2i.sma.controller.GradeController;
 import com.i2i.sma.controller.StudentController;
 import com.i2i.sma.controller.TeacherController;
+import io.github.cdimascio.dotenv.Dotenv;
 
 /**
  * <p>
@@ -22,8 +23,26 @@ public class MainController {
     private GradeController gradeController = new GradeController();
 
     public static void main(String[] args) {
-        MainController mainController = new MainController();
+        MainController mainController = new MainController();        
         mainController.startExecution();
+    }
+
+    /**
+     * <p>
+     * This method is responsible to check the credentials of the user to access the database.
+     * It prompts the user to enter the username and password.
+     * It checks whether the entered username and password is right or not.
+     * </p>
+     * @return
+     *     true if the entered username and password is correct or else false.
+     */
+    public boolean isAccess() {
+        Dotenv dotenv = Dotenv.load();
+        System.out.println("Enter an admin username:");
+        String uname = scanner.next();
+        System.out.println("Enter an admin password:");
+        String psw = scanner.next();
+        return uname.equals(dotenv.get("ADMIN_UNAME")) && psw.equals(dotenv.get("ADMIN_PSW"));
     }
 
     /**
@@ -41,10 +60,10 @@ public class MainController {
         while (flag) {
             System.out.println("\n----------------------------------");
             System.out.println("Enter your choice");
-            System.out.println("1: Add Details");
+            System.out.println("1: Add Details (needs Admin access)");
             System.out.println("2: View Details");
             System.out.println("3: Search Details");
-            System.out.println("4: Remove Details");
+            System.out.println("4: Remove Details (needs Admin access)");
             System.out.println("5: Exit");
             System.out.println("\n----------------------------------");
             int choice = scanner.nextInt();
@@ -52,22 +71,27 @@ public class MainController {
                 case 1:
                     isExit = true;
                     while (isExit) {
-                        System.out.println("----------------------------------");
-                        System.out.println("\nWhat details you are going to add?");
-                        System.out.println("\n1: Student Details");
-                        System.out.println("\n2: Teacher Details\n");
-                        option = scanner.nextInt();
-                        switch (option) {
-                            case 1:
-                                studentController.addStudent();
-                                isExit = false;
-                                break;
-                            case 2:
-                                teacherController.addTeacher();
-                                isExit = false;
-                                break;
-                            default:
-                                System.out.println("\nEnter a valid choice within 1-2");
+                        if(isAccess()){
+                            System.out.println("----------------------------------");
+                            System.out.println("\nWhat details you are going to add?");
+                            System.out.println("\n1: Student Details");
+                            System.out.println("\n2: Teacher Details\n");
+                            option = scanner.nextInt();
+                            switch (option) {
+                                case 1:
+                                    studentController.addStudent();
+                                    isExit = false;
+                                    break;
+                                case 2:
+                                    teacherController.addTeacher();
+                                    isExit = false;
+                                    break;
+                                default:
+                                    System.out.println("\nEnter a valid choice within 1-2");
+                            }
+                        }  else {
+                            System.out.println("INVALID CREDENTIALS\n");
+                            isExit = false;
                         }
                     }
                     break;
@@ -128,27 +152,32 @@ public class MainController {
                 case 4:
                     isExit = true;
                     while (isExit) {
-                        System.out.println("----------------------------------");
-                        System.out.println("\nWhich details you are going to remove?");
-                        System.out.println("\n1: Student Details");
-                        System.out.println("\n2: Teacher Details");
-                        System.out.println("\n3: Grade Details\n");
-                        option = scanner.nextInt();
-                        switch (option) {
-                            case 1:
-                                studentController.removeStudent();
-                                isExit = false;
-                                break;
-                            case 2:
-                                teacherController.removeTeacher();
-                                isExit = false;
-                                break;
-                            case 3:
-                                gradeController.removeGrade();
-                                isExit = false;
-                                break;
-                            default:
-                                System.out.println("\nEnter a valid choice within 1-3");
+                        if(isAccess()) {
+                            System.out.println("----------------------------------");
+                            System.out.println("\nWhich details you are going to remove?");
+                            System.out.println("\n1: Student Details");
+                            System.out.println("\n2: Teacher Details");
+                            System.out.println("\n3: Grade Details\n");
+                            option = scanner.nextInt();
+                            switch (option) {
+                                case 1:
+                                    studentController.removeStudent();
+                                    isExit = false;
+                                    break;
+                                case 2:
+                                    teacherController.removeTeacher();
+                                    isExit = false;
+                                    break;
+                                case 3:
+                                    gradeController.removeGrade();
+                                    isExit = false;
+                                    break;
+                                default:
+                                    System.out.println("\nEnter a valid choice within 1-3");
+                            }
+                        }  else {
+                            System.out.println("INVALID CREDENTIALS\n");
+                            isExit = false;
                         }
                     }
                     break;
