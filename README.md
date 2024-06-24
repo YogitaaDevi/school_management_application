@@ -21,5 +21,6 @@ Based on the user's choice, the application works accordingly.
   2. Setup the classpath in environmental variable
   3. In the command prompt, type 
      - mvn --version (to check the version of the installed maven)
-     - mvn clean (to build our project)
+     - mvn clean install(to build our project)
+     - mvn compile (to compile our project)
      - mvn exec:java -Dexec.mainClass="MainController" (to run our project) 
