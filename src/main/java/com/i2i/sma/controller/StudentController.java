@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.models.Grade;
 import com.i2i.sma.models.Student;
@@ -21,6 +24,7 @@ import com.i2i.sma.utils.DataValidationUtil;
  */
 public class StudentController {
     private static Scanner scanner = new Scanner(System.in);
+    private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
     private StudentService studentService = new StudentService();
 
     /**
@@ -50,7 +54,6 @@ public class StudentController {
             }
             break;
         }
-
         while (true) {
             System.out.println("Enter your DOB as YYYY-MM-DD : ");
             dob = scanner.next();
@@ -61,7 +64,6 @@ public class StudentController {
             break;
         }
         LocalDate dateOfBirth = LocalDate.parse(dob);
-
         System.out.println("Enter the class : ");
         standard = scanner.nextInt();
         while (true) {
@@ -74,12 +76,17 @@ public class StudentController {
             break;
         }
         try {
+            logger.debug("RECEIVED INPUTS NAME: {}, DOB: {}, STANDARD: {} AND SECTION: {} ", name, dob, standard, section);
             Grade gradeDetail = studentService.getStudentGrade(standard, section);
             System.out.println(studentService.addStudentToGrade(name, dateOfBirth, gradeDetail));
             System.out.println(gradeDetail);
             System.out.println("\nStudent data has been added successfully");
+            logger.info("STUDENT DETAILS OF NAME: {} ADDED SUCCESSFULLY ", name);
+
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
+
         }
     }
 
@@ -96,11 +103,15 @@ public class StudentController {
                 for (Student student : Details) {
                     System.out.println(student);
                 }
+                logger.info("ALL STUDENTS DATA ARE DISPLAYED SUCCESSFULLY");
             } else {
                 System.out.println("NO STUDENT DATA FOUND IN THE DATABASE");
+                logger.warn("NO STUDENTS FOUND IN DATABASE");
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
+
         }
     }
 
@@ -117,15 +128,20 @@ public class StudentController {
         System.out.println("Enter the ID to search: ");
         int id = scanner.nextInt();
         try {
+            logger.debug("RECEIVED INPUT ID: {} ", id);
             Student searchedStudent = studentService.findStudent(id);
             if (null != searchedStudent) {
                 System.out.println(searchedStudent);
                 System.out.println(searchedStudent.getGrade());
+                logger.info("STUDENT ID: {} FOUND SUCCESSFULLY", id);
             } else {
                 System.out.println("THERE IS NO SUCH STUDENT " + id + " EXIST ");
+                logger.warn("CANNOT FIND STUDENT ID: {}", id);
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
+
         }
     }
 
@@ -143,11 +159,14 @@ public class StudentController {
         System.out.println("Enter the ID to delete: ");
         int id = scanner.nextInt();
         try {
+            logger.debug("RECEIVED INPUT ID: {} ", id);
             System.out.println((studentService.isDeleteStudent(id)) ? "\nSTUDENT ID "
                     + id + " REMOVED SUCCESSFULLY" : "\nERROR WHILE DELETING STUDENT ID "
                     + id + "\nPLEASE CHECK THE STUDENT ID PROPERLY");
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
+
         }
     }
 }

@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.models.Grade;
 import com.i2i.sma.models.Teacher;
 import com.i2i.sma.service.TeacherService;
-import com.i2i.sma.utils.DateUtil;
 import com.i2i.sma.utils.DataValidationUtil;
 
 /**
@@ -21,15 +23,17 @@ import com.i2i.sma.utils.DataValidationUtil;
  */
 public class TeacherController {
     private static Scanner scanner = new Scanner(System.in);
+    private static final Logger logger = LoggerFactory.getLogger(TeacherController.class);
     private TeacherService teacherService = new TeacherService();
 
     /**
      * <p>
      * This method handles the add a new teacher record and allocates a cabin for each of them.
-     * It prompts the user to enter the teacher's name, handling subject, for which standard and section.
-     * After collecting the information from the user, it validates whether the input from user is in correct format.
-     * For example : checks whether entered section contains a single letter alphabet,
-     * checks whether entered standard contains only numbers.
+     * It prompts the user to enter the teacher's name, handling subject, standards and sections.
+     * After collecting the information from the user, it validates whether the input from user
+     * is in correct format.For example :
+     *         checks whether entered section contains a single letter alphabet,
+     *         checks whether entered standard contains only numbers.
      * After validations, it adds the teacher to the database.
      * Once the teacher is successfully added, it prints out the teacher's details and a success message.
      * </p>
@@ -39,7 +43,7 @@ public class TeacherController {
         String subject;
         int standard;
         String section;
-        Set<Grade> grades = new HashSet<Grade>(0);
+        Set<Grade> grades = new HashSet<>(0);
         while (true) {
             System.out.println("Enter the teacher name: ");
             name = scanner.next();
@@ -82,10 +86,14 @@ public class TeacherController {
                     break;
                 }
             }
+            logger.debug("RECEIVED INPUTS NAME: {}, SUBJECT: {}, STANDARDS: {} AND SECTIONS: {} ",
+                         name, subject, grades);
             System.out.println(teacherService.addNewTeacher(name, subject, grades));
             System.out.println("\nTeacher data has been added successfully");
+            logger.info("TEACHER DETAILS OF NAME: {} ADDED SUCCESSFULLY ", name);
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -101,11 +109,14 @@ public class TeacherController {
                 for (Teacher teacher : Details) {
                     System.out.println(teacher);
                 }
+                logger.info("ALL TEACHERS DATA ARE DISPLAYED SUCCESSFULLY");
             } else {
                 System.out.println("NO TEACHER DATA FOUND IN THE DATABASE");
+                logger.warn("NO TEACHERS FOUND IN DATABASE");
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -123,16 +134,20 @@ public class TeacherController {
         System.out.println("Enter the ID to search: ");
         int id = scanner.nextInt();
         try {
+            logger.debug("RECEIVED INPUT ID: {} ", id);
             Teacher searchedTeacher = teacherService.findTeacher(id);
             if (null != searchedTeacher) {
                 System.out.println(searchedTeacher);
                 System.out.println(searchedTeacher.getCabin());
                 System.out.println(searchedTeacher.getGrades());
+                logger.info("TEACHER ID: {} FOUND SUCCESSFULLY", id);
             } else {
                 System.out.println("THERE IS NO SUCH TEACHER " + id + " EXIST ");
+                logger.warn("CANNOT FIND TEACHER ID: {}", id);
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -150,11 +165,13 @@ public class TeacherController {
         System.out.println("Enter the ID to delete: ");
         int id = scanner.nextInt();
         try {
+            logger.debug("RECEIVED INPUT ID: {} ", id);
             System.out.println((teacherService.isDeleteTeacher(id)) ? "\nTEACHER ID "
                     + id + " IS REMOVED SUCCESSFULLY ALONG WITH THEIR ASSOCIATED CABIN."
                     : "\nERROR WHILE DELETING TEACHER ID " + id + "\nPLEASE CHECK THE TEACHER ID PROPERLY");
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
 }

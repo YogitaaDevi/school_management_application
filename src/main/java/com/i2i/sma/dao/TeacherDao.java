@@ -26,14 +26,16 @@ public class TeacherDao {
 
     /**
      * <p>
-     * This method makes use of the Hibernate query language inorder to insert a new teacher record into the database.
+     * This method makes use of the Hibernate query language inorder
+     * to insert a new teacher record into the database.
      * </p>
      *
-     * @param teacher the teacher objects contains three things - 1. name of the teacher in string. Only alphabets are allowed.
-     *                2. subject that is handled by the teacher in string. Only alphabets are allowed.
-     *                3. grade that the teacher is going to handle.
-     * @return teacher the allocated teacher details.
-     * @throws SchoolManagementException this happens when something goes wrong during data insertion.
+     * @param teacher
+     *   contains three things - 1. name of the teacher in string. Only alphabets are allowed.
+     *                           2. subject handled by the teacher in string. Only alphabets are allowed.
+     *                           3. grade that the teacher is going to handle.
+     * @throws SchoolManagementException
+     *   this happens when something goes wrong during data insertion.
      */
     public void insertTeacherDetails(Teacher teacher) throws SchoolManagementException {
         Transaction transaction = null;
@@ -49,11 +51,14 @@ public class TeacherDao {
 
     /**
      * <p>
-     * This method makes use of the Hibernate query language inorder to display all teachers record from the database.
+     * This method makes use of the Hibernate query language inorder
+     * to display all teachers record from the database.
      * </p>
      *
-     * @return list of all teachers data along with their associated cabin details.
-     * @throws SchoolManagementException this happens when something goes wrong during data retrieving.
+     * @return
+     *   all teachers data along with their associated cabin details.
+     * @throws SchoolManagementException
+     *   this happens when something goes wrong during data retrieving.
      */
     public List<Teacher> getDetails() throws SchoolManagementException {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
@@ -65,13 +70,17 @@ public class TeacherDao {
 
     /**
      * <p>
-     * This method makes use of the Hibernate query language inorder to search and display for a particular teacher record.
+     * This method makes use of the Hibernate query language inorder
+     * to search and display for a particular teacher record.
      * It is done with the help of id (a unique identifier represent each students)
      * </p>
      *
-     * @param id a unique identifier for each student in integer.
-     * @return Teacher data if the id is available. Else returns null.
-     * @throws SchoolManagementException this happens when something goes wrong during searching for a data.
+     * @param id
+     *   a unique identifier for each teacher in integer.
+     * @return
+     *   Teacher data if the id is available. Else returns null.
+     * @throws SchoolManagementException
+     *   this happens when something goes wrong during searching for a data.
      */
     public Teacher findTeacherById(int id) throws SchoolManagementException {
         Teacher teacher = null;
@@ -88,13 +97,17 @@ public class TeacherDao {
 
     /**
      * <p>
-     * This method makes use of the Hibernate query language to delete a particular teacher record from the teacher table along with cabin allocated for them.
+     * This method makes use of the Hibernate query language
+     * to delete a particular teacher record from the teacher table along with cabin allocated for them.
      * It is done with the help of id (a unique identifier represent each teachers).
      * </p>
      *
-     * @param id a unique identifier for each teacher in integer.
-     * @return returns true if the particular teacher record is deleted.Else returns false.
-     * @throws SchoolManagementException this happens when something goes wrong during data removing.
+     * @param id
+     *   a unique identifier for each teacher in integer.
+     * @return
+     *   true if the particular teacher record is deleted.Else returns false.
+     * @throws SchoolManagementException
+     *   this happens when something goes wrong during data removing.
      */
     public boolean isRemoveTeacher(int id) throws SchoolManagementException {
         Transaction transaction = null;

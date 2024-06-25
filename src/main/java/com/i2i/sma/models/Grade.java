@@ -59,11 +59,9 @@ public class Grade {
     public void setStandard(int standard) {
         this.standard = standard;
     }
-
     public void setSection(String section) {
         this.section = section;
     }
-
     public void setStudents(Set<Student> students) {
         this.students = students;
     }

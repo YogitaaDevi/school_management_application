@@ -30,10 +30,13 @@ public class StudentService {
      * 3. Finally, it returns the created Student object.
      * </p>
      *
-     * @param name  the name of the student in String. Only alphabets are allowed.
-     * @param dob   the date of birth of the student in YYYY-MM-DD format
-     * @param grade that contains: 1. id(unique identifier of a particular grade)
-     *              2. standard and section the student is enrolling in. Only 1-12 are acceptable.
+     * @param name
+     *   the name of the student in String. Only alphabets are allowed.
+     * @param dob
+     *   the date of birth of the student in YYYY-MM-DD format
+     * @param grade
+     *   that contains: 1. id(unique identifier of a particular grade)
+     *                  2. standard and section the student is enrolling in. Only 1-12 are acceptable.
      * @return the created Student details.
      * @throws SchoolManagementException this occurs when anything went wrong while inserting a data.
      */
@@ -53,16 +56,20 @@ public class StudentService {
      * The method performs the following steps:
      * 1. It checks if the specified standard and section is present.
      * 2. If present, it returns the grade details.
-     * 3. If not present, it adds the particular standard and section to the database and returns that grade details.
+     * 3. If not present, it adds the particular standard and section to the database
+     * and returns that grade details.
      * </p>
      *
-     * @param standard the standard of the grade in numerical. Only 1-12 numbers are acceptable.
-     * @param section  the section of the grade in string. Only alphabets are allowed
+     * @param standard
+     *   the standard of the grade in numerical. Only 1-12 numbers are acceptable.
+     * @param section
+     *   the section of the grade in string. Only alphabets are allowed
      * @return gradeDetails.
-     * that contains: 1. id of the grade(a unique identifier represents each grade)
-     * 2. standard of the grade in integer.
-     * 3. the section of the grade in string.
-     * @throws SchoolManagementException this occurs when anything went wrong while inserting a data.
+     *   that contains: 1. id of the grade(a unique identifier represents each grade)
+     *                  2. standard of the grade in integer.
+     *                  3. the section of the grade in string.
+     * @throws SchoolManagementException
+     *   this occurs when anything went wrong while inserting a data.
      */
     public Grade getStudentGrade(int standard, String section) throws SchoolManagementException {
         Grade gradeDetails = gradeService.getGrade(standard, section);
@@ -81,7 +88,8 @@ public class StudentService {
      * </p>
      *
      * @return all Student details in form of list to display it to the enduser.
-     * @throws SchoolManagementException this occurs when anything went wrong while retrieving data.
+     * @throws SchoolManagementException
+     *   this occurs when anything went wrong while retrieving data.
      */
     public List<Student> fetchStudents() throws SchoolManagementException {
         return studentDao.getDetails();
@@ -89,12 +97,16 @@ public class StudentService {
 
     /**
      * <p>
-     * This method retrieves a particular student record from the database based on the id (unique identifier represents each student).
+     * This method retrieves a particular student record
+     * from the database based on the id (unique identifier represents each student).
      * </p>
      *
-     * @param id the unique identifier of the student to be retrieved.
-     * @return Student corresponding to the provided ID if found. Else null if no such student is found.
-     * @throws SchoolManagementException this occurs when anything went wrong while searching a data.
+     * @param id
+     *   the unique identifier of the student to be retrieved.
+     * @return
+     *   Student corresponding to the provided ID if found. Else null if no such student is found.
+     * @throws SchoolManagementException
+     *   this occurs when anything went wrong while searching a data.
      */
     public Student findStudent(int id) throws SchoolManagementException {
         return studentDao.findStudentById(id);
@@ -102,13 +114,17 @@ public class StudentService {
 
     /**
      * <p>
-     * This method deletes a particular student record from the database based on the provided student ID.
+     * This method deletes a particular student record
+     * from the database based on the provided student ID.
      * If the given id matches, it removes the student with the specified ID.
      * </p>
      *
-     * @param id the unique identifier of the student to be deleted.
-     * @return returns true if the specified student id is deleted successfully or else returns false
-     * @throws SchoolManagementException this occurs when anything went wrong while removing a data.
+     * @param id
+     *   the unique identifier of the student to be deleted.
+     * @return
+     *   true if the specified student id is deleted successfully or else returns false
+     * @throws SchoolManagementException
+     *   this occurs when anything went wrong while removing a data.
      */
     public boolean isDeleteStudent(int id) throws SchoolManagementException {
         return studentDao.isRemoveStudent(id);

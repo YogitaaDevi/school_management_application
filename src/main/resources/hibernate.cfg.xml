@@ -12,9 +12,10 @@
         <property name="hibernate.format_sql">true</property>
         <property name="hibernate.use_sql_comments">true</property>
 
-        <mapping class="com.i2i.sma.models.Student"/>
-        <mapping class="com.i2i.sma.models.Grade"/>
-        <mapping class="com.i2i.sma.models.Teacher"/>
+        <mapping class="com.i2i.sma.models.Admin"/>
         <mapping class="com.i2i.sma.models.Cabin"/>
+        <mapping class="com.i2i.sma.models.Grade"/>
+        <mapping class="com.i2i.sma.models.Student"/>
+        <mapping class="com.i2i.sma.models.Teacher"/>
     </session-factory>
 </hibernate-configuration>

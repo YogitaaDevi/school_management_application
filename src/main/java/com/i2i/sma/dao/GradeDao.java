@@ -29,12 +29,15 @@ public class GradeDao {
 
     /**
      * <p>
-     * This method makes use of the Hibernate query language inorder to insert a new grade record into the database.
+     * This method makes use of the Hibernate query language inorder
+     * to insert a new grade record into the database.
      * </p>
      *
-     * @param grade the grade contains two things - 1. standard of the grade in integer. Only 1-12 numbers are acceptable.
-     *              2. section of the grade in string. Only alphabets are allowed.
-     * @throws SchoolManagementException this happens when something goes wrong during data insertion.
+     * @param grade
+     *   contains 2 things - 1. standard of the grade in integer. Only 1-12 numbers are acceptable.
+     *                       2. section of the grade in string. Only alphabets are allowed.
+     * @throws SchoolManagementException
+     *   this happens when something goes wrong during data insertion.
      */
     public Grade insertGrade(Grade grade) throws SchoolManagementException {
         Transaction transaction = null;
@@ -51,17 +54,21 @@ public class GradeDao {
 
     /**
      * <p>
-     * This method makes use of Hibernate query language to get specific standard and section details.
-     * It returns the particular grade with its id(a unique identifier represents each grade).
+     * This method makes use of Hibernate query language to get
+     * specific standard and section details.
+     * It returns the particular grade with its id(a unique identifier).
      * </p>
      *
-     * @param standard the class standard of the grade in numerical. Only 1-12 numbers are acceptable.
-     * @param section  the section of the grade in string. Only alphabets are allowed.
+     * @param standard
+     *   the class standard of the grade in numerical. Only 1-12 numbers are acceptable.
+     * @param section
+     *   the section of the grade in string. Only alphabets are allowed.
      * @return Grade
      * that contains: 1. standard of the grade in integer. Only 1-12 numbers are acceptable.
-     * 2. section of the grade in string. Only alphabets are allowed.
-     * 3. id (a unique identifier represents each grade).
-     * @throws SchoolManagementException this happens when something goes wrong during data fectching.
+     *                2. section of the grade in string. Only alphabets are allowed.
+     *                3. id (a unique identifier represents each grade).
+     * @throws SchoolManagementException
+     *   this happens when something goes wrong during data fetching.
      */
     public Grade fetchGrade(int standard, String section) throws SchoolManagementException {
         Transaction transaction = null;
@@ -83,11 +90,14 @@ public class GradeDao {
 
     /**
      * <p>
-     * This method uses Hibernate to retrieve all the records of standards and sections available in the Grade table.
+     * This method uses Hibernate to retrieve all the
+     * records of standards and sections available in the Grade table.
      * </p>
      *
-     * @return list of all standards and sections along with their grade id available in the grade table.
-     * @throws SchoolManagementException this happens when something goes wrong during fetching data.
+     * @return
+     *   all standards and sections along with their grade id available in the grade table.
+     * @throws SchoolManagementException
+     *   this happens when something goes wrong during fetching data.
      */
     public List<Grade> getDetails() throws SchoolManagementException {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
@@ -99,14 +109,17 @@ public class GradeDao {
 
     /**
      * <p>
-     * This method uses Hibernate to retrieve a particular record of standard and section available in the Grade table.
+     * This method uses Hibernate to retrieve a
+     * particular record of standard and section available in the Grade table.
      * </p>
      *
-     * @param id the grade id (a unique identifier represents each standard and section) provided by the user.
+     * @param id
+     *   the id (a unique identifier represents each standard and section) provided by the user.
      * @return Grade
-     * If found, returns standard and section with the students and teachers associated with it.
-     * Else returns null.
-     * @throws SchoolManagementException this happens when something goes wrong during data searching.
+     *   If found, returns standard and section with the students and teachers associated with it.
+     *   Else returns null.
+     * @throws SchoolManagementException
+     *   this happens when something goes wrong during data searching.
      */
     public Grade findGradeById(int id) throws SchoolManagementException {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
@@ -123,12 +136,16 @@ public class GradeDao {
 
     /**
      * <p>
-     * This method uses Hibernate to delete a particular record from the Grade table along with the students present in it.
+     * This method uses Hibernate to delete a particular record
+     * from the Grade table along with the students present in it.
      * </p>
      *
-     * @param id the grade id (a unique identifier represents each standard and section) provided by the user.
-     * @return returns true if the specified grade is successfully deleted or else returns false.
-     * @throws SchoolManagementException this occurs when anything went wrong while removing data.
+     * @param id
+     *   the id (a unique identifier represents each standard and section) provided by the user.
+     * @return
+     *   true if the specified grade is successfully deleted or else returns false.
+     * @throws SchoolManagementException
+     *   this occurs when anything went wrong while removing data.
      */
     public boolean isRemoveGrade(int id) throws SchoolManagementException {
         Transaction transaction = null;

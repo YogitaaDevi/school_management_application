@@ -1,18 +1,15 @@
 package com.i2i.sma.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.models.Grade;
-import com.i2i.sma.models.Student;
-import com.i2i.sma.models.Teacher;
 import com.i2i.sma.service.GradeService;
-import com.i2i.sma.utils.DateUtil;
-import com.i2i.sma.utils.DataValidationUtil;
+
 
 /**
  * <p>
@@ -23,6 +20,7 @@ import com.i2i.sma.utils.DataValidationUtil;
  */
 public class GradeController {
     private static Scanner scanner = new Scanner(System.in);
+    private static final Logger logger = LoggerFactory.getLogger(GradeController.class);
     private GradeService gradeService = new GradeService();
 
     /**
@@ -38,11 +36,14 @@ public class GradeController {
                 for (Grade grade : Details) {
                     System.out.println(grade);
                 }
+                logger.info("ALL GRADES DATA ARE DISPLAYED SUCCESSFULLY");
             } else {
                 System.out.println("NO GRADES FOUND IN THE DATABASE");
+                logger.warn("NO TEACHERS FOUND IN DATABASE");
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -59,16 +60,20 @@ public class GradeController {
         System.out.println("Enter the ID to search: ");
         int id = scanner.nextInt();
         try {
+            logger.debug("RECEIVED INPUT ID: {} ", id);
             Grade searchedGradeDetails = gradeService.fetchGradeById(id);
             if (null != searchedGradeDetails) {
                 System.out.println(searchedGradeDetails);
                 System.out.println(searchedGradeDetails.getStudents());
                 System.out.println(searchedGradeDetails.getTeachers());
+                logger.info("GRADE ID: {} FOUND SUCCESSFULLY", id);
             } else {
                 System.out.println("THERE IS NO SUCH GRADE " + id + " EXIST ");
+                logger.warn("CANNOT FIND GRADE ID: {}", id);
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -86,11 +91,13 @@ public class GradeController {
         System.out.println("Enter the grade ID to be deleted: ");
         int id = scanner.nextInt();
         try {
+            logger.debug("RECEIVED INPUT ID: {} ", id);
             System.out.println((gradeService.isDeleteGrade(id)) ? "\nGRADE ID "
                     + id + " IS REMOVED ALONG WITH THE STUDENTS PRESENT IN IT."
                     : "\nERROR WHILE DELETING GRADE ID " + id + "\nPLEASE CHECK THE GRADE ID PROPERLY");
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
     }
 }
