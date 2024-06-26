@@ -46,12 +46,11 @@ public class MainController {
      *     true if the entered username and password is correct or else false.
      */
     public boolean isMainAdminAccess() {
-        Dotenv dotenv = Dotenv.load();
         System.out.println("Enter main admin username:");
         String uname = scanner.next();
         System.out.println("Enter main admin password:");
         String pwd = scanner.next();
-        return uname.equals(dotenv.get("ADMIN_UNAME")) && pwd.equals(dotenv.get("ADMIN_PWD"));
+        return isMainAdminCheck(uname, pwd);
     }
 
     /**
@@ -68,14 +67,26 @@ public class MainController {
         String uname = scanner.next();
         System.out.println("Enter an admin password:");
         String pwd = scanner.next();
-        Dotenv dotenv = Dotenv.load();
-        boolean isMainAdmin = uname.equals(dotenv.get("ADMIN_UNAME"))
-                              && pwd.equals(dotenv.get("ADMIN_PWD"));
-        if(!isMainAdmin) {
+        if(!isMainAdminCheck(uname, pwd)) {
             return adminController.isAdmin(uname, pwd);
         }
         return true;
     }
+
+    /**
+     * <p>
+     * This method is to check whether username and password matches the main admin's credentails.
+     * If matches , it returns true.
+     * Else returns false;
+     * </p>
+     * @return
+     *     true if the entered username and password is matches or else false.
+     */
+    public boolean isMainAdminCheck(String name, String pwd){
+        Dotenv dotenv = Dotenv.load();
+        return name.equals(dotenv.get("ADMIN_UNAME")) && pwd.equals(dotenv.get("ADMIN_PWD"));
+    }
+
 
     /**
      * <p>

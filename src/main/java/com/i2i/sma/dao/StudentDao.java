@@ -115,6 +115,7 @@ public class StudentDao {
             transaction = session.beginTransaction();
             Student student = session.get(Student.class, id);
             if (null != student) {
+                student.getGrade().getStudents().remove(student);
                 session.delete(student);
                 transaction.commit();
                 return true;

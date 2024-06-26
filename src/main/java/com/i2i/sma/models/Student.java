@@ -37,7 +37,7 @@ public class Student {
     @Column(name = "dob", nullable = false)
     private LocalDate dob;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "group_id", nullable = false)
     private Grade grade;
 
