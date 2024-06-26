@@ -19,7 +19,7 @@ public class HibernateConnection {
         Configuration configuration = new Configuration().configure();
         configuration.setProperty("hibernate.connection.url", dotenv.get("DATABASE_URL"));
         configuration.setProperty("hibernate.connection.username", dotenv.get("DATABASE_UNAME"));
-        configuration.setProperty("hibernate.connection.password", dotenv.get("DATABASE_PSW"));
+        configuration.setProperty("hibernate.connection.password", dotenv.get("DATABASE_PWD"));
         sessionFactory = configuration.buildSessionFactory();
     }
 

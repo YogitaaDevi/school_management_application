@@ -45,13 +45,13 @@ public class MainController {
      * @return
      *     true if the entered username and password is correct or else false.
      */
-    public boolean isAccess() {
+    public boolean isMainAdminAccess() {
         Dotenv dotenv = Dotenv.load();
         System.out.println("Enter main admin username:");
         String uname = scanner.next();
         System.out.println("Enter main admin password:");
-        String psw = scanner.next();
-        return uname.equals(dotenv.get("ADMIN_UNAME")) && psw.equals(dotenv.get("ADMIN_PSW"));
+        String pwd = scanner.next();
+        return uname.equals(dotenv.get("ADMIN_UNAME")) && pwd.equals(dotenv.get("ADMIN_PWD"));
     }
 
     /**
@@ -63,12 +63,18 @@ public class MainController {
      * @return
      *     true if the entered username and password is correct or else false.
      */
-    public boolean isCredentials() {
+    public boolean isAdminAccess() {
         System.out.println("Enter an admin username:");
         String uname = scanner.next();
         System.out.println("Enter an admin password:");
-        String psw = scanner.next();
-        return adminController.isAdmin(uname, psw);
+        String pwd = scanner.next();
+        Dotenv dotenv = Dotenv.load();
+        boolean isMainAdmin = uname.equals(dotenv.get("ADMIN_UNAME"))
+                              && pwd.equals(dotenv.get("ADMIN_PWD"));
+        if(!isMainAdmin) {
+            return adminController.isAdmin(uname, pwd);
+        }
+        return true;
     }
 
     /**
@@ -76,7 +82,7 @@ public class MainController {
      * This method is responsible for the functionalities to create, add, display,
      * search and delete the details of students, grades and teachers.
      * It prompts the user to choose whether to make changes in student, grade or teacher details.
-     * After getting the choice from the user, it performs the action by using the corresponding controller.
+     * After getting the choice, it performs the action by using the corresponding controller class.
      * </p>
      */
     public void startExecution() {
@@ -84,22 +90,22 @@ public class MainController {
         boolean isExit;
         int option;
         while (flag) {
-            System.out.println("\n----------------------------------");
+            System.out.println("\n----------------------------------\n");
             System.out.println("Enter your choice");
-            System.out.println("1: Add Details (needs Admin access)");
+            System.out.println("1: Add Details (Admin access)");
             System.out.println("2: View Details");
             System.out.println("3: Search Details");
-            System.out.println("4: Remove Details (needs Admin access)");
-            System.out.println("5: Admin Details (needs Admin access)");
+            System.out.println("4: Remove Details (Admin access)");
+            System.out.println("5: Admin Details (Only Main Admin access)");
             System.out.println("6: Exit");
-            System.out.println("\n----------------------------------");
+            System.out.println("\n----------------------------------\n");
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1:
                     isExit = true;
                     while (isExit) {
-                        if(isCredentials()){
-                            System.out.println("----------------------------------");
+                        if(isAdminAccess()){
+                            System.out.println("\n----------------------------------");
                             System.out.println("\nWhat details you are going to add?");
                             System.out.println("\n1: Student Details");
                             System.out.println("\n2: Teacher Details\n");
@@ -119,7 +125,7 @@ public class MainController {
                                     System.out.println("\nEnter a valid choice within 1-2");
                             }
                         }  else {
-                            System.out.println("INVALID CREDENTIALS\n");
+                            System.out.println("\nINVALID CREDENTIALS\n");
                             isExit = false;
                         }
                     }
@@ -127,7 +133,7 @@ public class MainController {
                 case 2:
                     isExit = true;
                     while (isExit) {
-                        System.out.println("----------------------------------");
+                        System.out.println("\n----------------------------------");
                         System.out.println("\nWhat details you are going to view?");
                         System.out.println("\n1: Student Details");
                         System.out.println("\n2: Teacher Details");
@@ -157,7 +163,7 @@ public class MainController {
                 case 3:
                     isExit = true;
                     while (isExit) {
-                        System.out.println("----------------------------------");
+                        System.out.println("\n----------------------------------");
                         System.out.println("\nWhich details you are going to search?");
                         System.out.println("\n1: Student Details");
                         System.out.println("\n2: Teacher Details");
@@ -187,8 +193,8 @@ public class MainController {
                 case 4:
                     isExit = true;
                     while (isExit) {
-                        if(isCredentials()) {
-                            System.out.println("----------------------------------");
+                        if(isAdminAccess()) {
+                            System.out.println("\n----------------------------------");
                             System.out.println("\nWhich details you are going to remove?");
                             System.out.println("\n1: Student Details");
                             System.out.println("\n2: Teacher Details");
@@ -222,8 +228,8 @@ public class MainController {
                 case 5:
                     isExit = true;
                     while (isExit) {
-                        if(isAccess()) {
-                            System.out.println("----------------------------------");
+                        if(isMainAdminAccess()) {
+                            System.out.println("\n----------------------------------");
                             System.out.println("\nChoose the operation are you going to do?");
                             System.out.println("\n1: Add Admin");
                             System.out.println("\n2: Remove Admin\n");
@@ -234,10 +240,6 @@ public class MainController {
                                     adminController.addAdmin();
                                     isExit = false;
                                     break;
-//                                case 2:
-//                                    adminController.removeAdmin();
-//                                    isExit = false;
-//                                    break;
                                 default:
                                     System.out.println("\nEnter a valid choice within 1-2");
                             }
