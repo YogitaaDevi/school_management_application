@@ -1,5 +1,6 @@
 package com.i2i.sma.controller;
 
+import java.util.List;
 import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,13 +49,37 @@ public class AdminController {
         System.out.println("Enter a password : ");
         password = scanner.next();
         try {
-            logger.debug("RECEIVED INPUTS NAME: {}, PASSWORD: {} ", name, password);
             System.out.println(adminService.addAdminDetails(name, password));
             System.out.println("\nAdmin data has been added successfully");
             logger.info("ADMIN DETAILS OF NAME: {} ADDED SUCCESSFULLY ", name);
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
             logger.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * <p>
+     * This method handles displaying all admins record.
+     * It calls fetchAdmins method and displays the all admin details that are available.
+     * </p>
+     */
+    public void viewAdmins() {
+        try {
+            List<Admin> Details = adminService.fetchAdmins();
+            if (null != Details) {
+                for (Admin admin : Details) {
+                    System.out.println(admin);
+                }
+                logger.info("ALL ADMINS DATA ARE DISPLAYED SUCCESSFULLY");
+            } else {
+                System.out.println("NO STUDENT DATA FOUND IN THE DATABASE");
+                logger.warn("NO ADMINS FOUND IN DATABASE");
+            }
+        } catch (SchoolManagementException e) {
+            System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
+
         }
     }
 
@@ -77,5 +102,57 @@ public class AdminController {
             logger.error(e.getMessage(), e);
         }
         return false;
+    }
+
+    /**
+     * <p>
+     * This method handles searching admins from record.
+     * It prompts the user to enter the admin id they wish to see the details.
+     * After getting id from the user, it retrieves data and display it to the user.
+     * If the user given wrong id, it displays a warning message.
+     * For example: provide valid admin id.
+     * </p>
+     */
+    public void searchAdmin() {
+        System.out.println("Enter the ID to search: ");
+        int id = scanner.nextInt();
+        try {
+            Admin searchedAdmin = adminService.findAdmin(id);
+            if (null != searchedAdmin) {
+                System.out.println(searchedAdmin);
+                logger.info("ADMIN ID: {} FOUND SUCCESSFULLY", id);
+            } else {
+                System.out.println("THERE IS NO SUCH ADMIN " + id + " EXIST ");
+                logger.warn("CANNOT FIND ADMIN OF ID: {}", id);
+            }
+        } catch (SchoolManagementException e) {
+            System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
+
+        }
+    }
+
+    /**
+     * <p>
+     * This method handles removing admins from record.
+     * It prompts the user to enter the id of the admin they wish to remove the details.
+     * After getting id from the user, it deletes the particular data.
+     * After removing, it displays a successful message.
+     * If the user given wrong id, it displays a warning message.
+     * For example: provide valid admin id.
+     * </p>
+     */
+    public void removeAdmin() {
+        System.out.println("Enter the ID to delete: ");
+        int id = scanner.nextInt();
+        try {
+            System.out.println((adminService.isDeleteAdmin(id)) ? "\nADMIN ID "
+                    + id + " REMOVED SUCCESSFULLY" : "\nERROR WHILE DELETING ADMIN ID "
+                    + id + "\nPLEASE CHECK THE ADMIN ID PROPERLY");
+        } catch (SchoolManagementException e) {
+            System.out.println(e.getMessage());
+            logger.error(e.getMessage(), e);
+
+        }
     }
 }

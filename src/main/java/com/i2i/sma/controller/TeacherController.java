@@ -86,8 +86,6 @@ public class TeacherController {
                     break;
                 }
             }
-            logger.debug("RECEIVED INPUTS NAME: {}, SUBJECT: {}, STANDARDS: {} AND SECTIONS: {} ",
-                         name, subject, grades);
             System.out.println(teacherService.addNewTeacher(name, subject, grades));
             System.out.println("\nTeacher data has been added successfully");
             logger.info("TEACHER DETAILS OF NAME: {} ADDED SUCCESSFULLY ", name);
@@ -134,7 +132,6 @@ public class TeacherController {
         System.out.println("Enter the ID to search: ");
         int id = scanner.nextInt();
         try {
-            logger.debug("RECEIVED INPUT ID: {} ", id);
             Teacher searchedTeacher = teacherService.findTeacher(id);
             if (null != searchedTeacher) {
                 System.out.println(searchedTeacher);
@@ -165,10 +162,10 @@ public class TeacherController {
         System.out.println("Enter the ID to delete: ");
         int id = scanner.nextInt();
         try {
-            logger.debug("RECEIVED INPUT ID: {} ", id);
-            System.out.println((teacherService.isDeleteTeacher(id)) ? "\nTEACHER ID "
-                    + id + " IS REMOVED SUCCESSFULLY ALONG WITH THEIR ASSOCIATED CABIN."
-                    : "\nERROR WHILE DELETING TEACHER ID " + id + "\nPLEASE CHECK THE TEACHER ID PROPERLY");
+            System.out.println((teacherService.isDeleteTeacher(id)) ? "\nTEACHER ID " + id +
+                    " IS REMOVED SUCCESSFULLY ALONG WITH THEIR ASSOCIATED CABIN."
+                    : "\nERROR WHILE DELETING TEACHER ID " + id +
+                    "\nPLEASE CHECK THE TEACHER ID PROPERLY");
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
             logger.error(e.getMessage(), e);

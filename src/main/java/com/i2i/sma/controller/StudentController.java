@@ -76,7 +76,6 @@ public class StudentController {
             break;
         }
         try {
-            logger.debug("RECEIVED INPUTS NAME: {}, DOB: {}, STANDARD: {} AND SECTION: {} ", name, dob, standard, section);
             Grade gradeDetail = studentService.getStudentGrade(standard, section);
             System.out.println(studentService.addStudentToGrade(name, dateOfBirth, gradeDetail));
             System.out.println(gradeDetail);
@@ -128,7 +127,6 @@ public class StudentController {
         System.out.println("Enter the ID to search: ");
         int id = scanner.nextInt();
         try {
-            logger.debug("RECEIVED INPUT ID: {} ", id);
             Student searchedStudent = studentService.findStudent(id);
             if (null != searchedStudent) {
                 System.out.println(searchedStudent);
@@ -136,7 +134,7 @@ public class StudentController {
                 logger.info("STUDENT ID: {} FOUND SUCCESSFULLY", id);
             } else {
                 System.out.println("THERE IS NO SUCH STUDENT " + id + " EXIST ");
-                logger.warn("CANNOT FIND STUDENT ID: {}", id);
+                logger.warn("CANNOT FIND STUDENT OF ID: {}", id);
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
@@ -159,7 +157,6 @@ public class StudentController {
         System.out.println("Enter the ID to delete: ");
         int id = scanner.nextInt();
         try {
-            logger.debug("RECEIVED INPUT ID: {} ", id);
             System.out.println((studentService.isDeleteStudent(id)) ? "\nSTUDENT ID "
                     + id + " REMOVED SUCCESSFULLY" : "\nERROR WHILE DELETING STUDENT ID "
                     + id + "\nPLEASE CHECK THE STUDENT ID PROPERLY");

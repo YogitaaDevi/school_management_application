@@ -38,8 +38,8 @@ public class GradeController {
                 }
                 logger.info("ALL GRADES DATA ARE DISPLAYED SUCCESSFULLY");
             } else {
-                System.out.println("NO GRADES FOUND IN THE DATABASE");
-                logger.warn("NO TEACHERS FOUND IN DATABASE");
+                System.out.println("NO GRADE DETAILS FOUND IN THE DATABASE");
+                logger.warn("NO GRADES FOUND IN DATABASE");
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
@@ -60,7 +60,6 @@ public class GradeController {
         System.out.println("Enter the ID to search: ");
         int id = scanner.nextInt();
         try {
-            logger.debug("RECEIVED INPUT ID: {} ", id);
             Grade searchedGradeDetails = gradeService.fetchGradeById(id);
             if (null != searchedGradeDetails) {
                 System.out.println(searchedGradeDetails);
@@ -91,7 +90,6 @@ public class GradeController {
         System.out.println("Enter the grade ID to be deleted: ");
         int id = scanner.nextInt();
         try {
-            logger.debug("RECEIVED INPUT ID: {} ", id);
             System.out.println((gradeService.isDeleteGrade(id)) ? "\nGRADE ID "
                     + id + " IS REMOVED ALONG WITH THE STUDENTS PRESENT IN IT."
                     : "\nERROR WHILE DELETING GRADE ID " + id + "\nPLEASE CHECK THE GRADE ID PROPERLY");

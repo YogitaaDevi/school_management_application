@@ -7,6 +7,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.helper.HibernateConnection;
@@ -22,6 +24,7 @@ import com.i2i.sma.models.Student;
  * </p>
  */
 public class StudentDao {
+    private static final Logger logger = LoggerFactory.getLogger(StudentDao.class);
 
     /**
      * <p>
@@ -29,22 +32,23 @@ public class StudentDao {
      * insert a new student record into the database.
      * </p>
      *
-     * @param student
-     *   contains three things - 1. name of the student in string. Only alphabets are allowed.
-     *                           2. date of birth of the student in string.
-     *                           3. grade of the student.
-     * @throws SchoolManagementException
-     *   this happens when something goes wrong during data insertion.
+     * @param student contains three things - 1. name of the student in string. Only alphabets are allowed.
+     *                2. date of birth of the student in string.
+     *                3. grade of the student.
+     * @throws SchoolManagementException this happens when something goes wrong during data insertion.
      */
     public void insertStudent(Student student) throws SchoolManagementException {
         Transaction transaction = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            logger.debug("PROCESS STARTED: INSERTING STUDENT DETAILS OF NAME: {} IN THE DATABASE",
+                    student.getName());
             transaction = session.beginTransaction();
             session.save(student);
             transaction.commit();
         } catch (HibernateException e) {
             HibernateConnection.rollbackTransaction(transaction);
-            throw new SchoolManagementException("\nSOMETHING WENT WRONG WHILE INSERTING STUDENT DETAILS OF NAME " + student.getName());
+            throw new SchoolManagementException("\nSOMETHING WENT WRONG WHILE INSERTING STUDENT" +
+                    " DETAILS OF NAME " + student.getName());
         }
     }
 
@@ -55,16 +59,16 @@ public class StudentDao {
      * </p>
      *
      * @return list of all student data
-     *   contains - 1.id(a unique identifier)
-     *              2.name
-     *              3.date of birth
-     *              4.grade id
-     * @throws SchoolManagementException
-     *   this happens when something goes wrong during data retrieving.
+     * contains - 1.id(a unique identifier)
+     * 2.name
+     * 3.date of birth
+     * 4.grade id
+     * @throws SchoolManagementException this happens when something goes wrong during data retrieving.
      */
     public List<Student> getDetails() throws SchoolManagementException {
         List<Student> students = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            logger.debug("PROCESS STARTED: FETCHING ALL STUDENT DETAILS FROM THE DATABASE");
             students = session.createQuery("FROM Student", Student.class).list();
             for (Student student : students) {
                 Hibernate.initialize(student.getGrade());
@@ -81,18 +85,18 @@ public class StudentDao {
      * to retrieve a particular student record from the database using the student ID.
      * </p>
      *
-     * @param id
-     *   a unique identifier for each student in integer.
+     * @param id a unique identifier for each student in integer.
      * @return Student data along with their class details if the ID is available.
-     *   Else returns an empty student.
-     * @throws SchoolManagementException
-     *   this happens when something goes wrong during searching for a data.
+     * Else returns an empty student.
+     * @throws SchoolManagementException this happens when something goes wrong during searching for a data.
      */
     public Student findStudentById(int id) throws SchoolManagementException {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            logger.debug("PROCESS STARTED: FETCHING A STUDENT DETAILS OF ID: {} FROM THE DATABASE", id);
             return session.get(Student.class, id);
         } catch (HibernateException e) {
-            throw new SchoolManagementException("\nSOMETHING WENT WRONG WHILE FETCHING THE STUDENT ID " + id + " DETAILS.\nPLEASE TRY AGAIN...");
+            throw new SchoolManagementException("\nSOMETHING WENT WRONG WHILE FETCHING THE STUDENT ID "
+                    + id + " DETAILS.\nPLEASE TRY AGAIN...");
         }
     }
 
@@ -102,16 +106,14 @@ public class StudentDao {
      * to delete a particular student record from the database using the student ID.
      * </p>
      *
-     * @param id
-     *   a unique identifier for each student in integer.
-     * @return
-     *   returns true if the student was successfully deleted or else returns false.
-     * @throws SchoolManagementException
-     *   this happens when something goes wrong during data removing.
+     * @param id a unique identifier for each student in integer.
+     * @return returns true if the student was successfully deleted or else returns false.
+     * @throws SchoolManagementException this happens when something goes wrong during data removing.
      */
     public boolean isRemoveStudent(int id) throws SchoolManagementException {
         Transaction transaction = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            logger.debug("PROCESS STARTED: REMOVING A STUDENT DETAILS OF ID: {} FROM THE DATABASE", id);
             transaction = session.beginTransaction();
             Student student = session.get(Student.class, id);
             if (null != student) {
@@ -124,7 +126,8 @@ public class StudentDao {
             }
         } catch (HibernateException e) {
             HibernateConnection.rollbackTransaction(transaction);
-            throw new SchoolManagementException("\nSOMETHING WENT WRONG WHILE REMOVING THE STUDENT ID " + id + "DETAILS.\nPLEASE TRY AGAIN...", e);
+            throw new SchoolManagementException("\nSOMETHING WENT WRONG WHILE REMOVING THE STUDENT ID "
+                    + id + "DETAILS.\nPLEASE TRY AGAIN...", e);
         }
     }
 }

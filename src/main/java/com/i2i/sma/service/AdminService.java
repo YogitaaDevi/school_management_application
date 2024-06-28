@@ -4,6 +4,8 @@ import com.i2i.sma.dao.AdminDao;
 import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.models.Admin;
 
+import java.util.List;
+
 /**
  * <p>
  * This class is responsible for managing admin details.
@@ -54,5 +56,53 @@ public class AdminService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * <p>
+     * This method retrieves all the admins record from the database.
+     * </p>
+     *
+     * @return all Admin details in form of list to display it to the enduser.
+     * @throws SchoolManagementException
+     *   this occurs when anything went wrong while retrieving data.
+     */
+    public List<Admin> fetchAdmins() throws SchoolManagementException {
+        return adminDao.getDetails();
+    }
+
+    /**
+     * <p>
+     * This method retrieves a particular admin record
+     * from the database based on the id (unique identifier represents each admin).
+     * </p>
+     *
+     * @param id
+     *   the unique identifier of the admin to be retrieved.
+     * @return 
+     *   an admin corresponding to the provided ID if found. Else null if no such admin is found.
+     * @throws SchoolManagementException
+     *   this occurs when anything went wrong while searching a data.
+     */
+    public Admin findAdmin(int id) throws SchoolManagementException {
+        return adminDao.findAdminById(id);
+    }
+
+    /**
+     * <p>
+     * This method deletes a particular student record
+     * from the database based on the provided student ID.
+     * If the given id matches, it removes the student with the specified ID.
+     * </p>
+     *
+     * @param id
+     *   the unique identifier of the student to be deleted.
+     * @return
+     *   true if the specified student id is deleted successfully or else returns false
+     * @throws SchoolManagementException
+     *   this occurs when anything went wrong while removing a data.
+     */
+    public boolean isDeleteAdmin(int id) throws SchoolManagementException {
+        return adminDao.isRemoveAdmin(id);
     }
 }

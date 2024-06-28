@@ -231,7 +231,7 @@ public class MainController {
                                     System.out.println("\nEnter a valid choice within 1-3");
                             }
                         }  else {
-                            System.out.println("INVALID CREDENTIALS\n");
+                            System.out.println("\nINVALID CREDENTIALS");
                             isExit = false;
                         }
                     }
@@ -242,20 +242,37 @@ public class MainController {
                         if(isMainAdminAccess()) {
                             System.out.println("\n----------------------------------");
                             System.out.println("\nChoose the operation are you going to do?");
-                            System.out.println("\n1: Add Admin");
-                            System.out.println("\n2: Remove Admin\n");
+                            System.out.println("\n1: Add an Admin");
+                            System.out.println("\n2: View all Admins");
+                            System.out.println("\n3: Search an Admin");
+                            System.out.println("\n2: Remove an Admin\n");
                             option = scanner.nextInt();
                             switch (option) {
                                 case 1:
-                                    logger.info("Navigating to the AdminController to add a admin");
+                                    logger.info("Navigating to the AdminController to add an admin");
                                     adminController.addAdmin();
+                                    isExit = false;
+                                    break;
+                                case 2:
+                                    logger.info("Navigating to the AdminController to view all admins");
+                                    adminController.viewAdmins();
+                                    isExit = false;
+                                    break;
+                                case 3:
+                                    logger.info("Navigating to the AdminController to search an admin");
+                                    adminController.searchAdmin();
+                                    isExit = false;
+                                    break;
+                                case 4:
+                                    logger.info("Navigating to the AdminController to remove an admin");
+                                    adminController.removeAdmin();
                                     isExit = false;
                                     break;
                                 default:
                                     System.out.println("\nEnter a valid choice within 1-2");
                             }
                         }  else {
-                            System.out.println("INVALID CREDENTIALS\n");
+                            System.out.println("\nINVALID CREDENTIALS");
                             isExit = false;
                         }
                     }

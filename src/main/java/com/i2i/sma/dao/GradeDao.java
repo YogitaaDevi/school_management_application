@@ -9,6 +9,8 @@ import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.helper.HibernateConnection;
@@ -26,13 +28,13 @@ import com.i2i.sma.models.Student;
  * </p>
  */
 public class GradeDao {
+    private static final Logger logger = LoggerFactory.getLogger(GradeDao.class);
 
     /**
      * <p>
      * This method makes use of the Hibernate query language inorder
      * to insert a new grade record into the database.
      * </p>
-     *
      * @param grade
      *   contains 2 things - 1. standard of the grade in integer. Only 1-12 numbers are acceptable.
      *                       2. section of the grade in string. Only alphabets are allowed.
@@ -42,6 +44,8 @@ public class GradeDao {
     public Grade insertGrade(Grade grade) throws SchoolManagementException {
         Transaction transaction = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            logger.debug("PROCESS STARTED: INSERTING GRADE DETAILS OF STANDARD: {} AND SECTION: {} " +
+                         "IN THE DATABASE", grade.getStandard(), grade.getSection());
             transaction = session.beginTransaction();
             session.save(grade);
             transaction.commit();
@@ -58,7 +62,6 @@ public class GradeDao {
      * specific standard and section details.
      * It returns the particular grade with its id(a unique identifier).
      * </p>
-     *
      * @param standard
      *   the class standard of the grade in numerical. Only 1-12 numbers are acceptable.
      * @param section
@@ -73,18 +76,23 @@ public class GradeDao {
     public Grade fetchGrade(int standard, String section) throws SchoolManagementException {
         Transaction transaction = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            logger.debug("PROCESS STARTED: FETCHING A GRADE DETAILS OF STANDARD: {} AND " +
+                    "SECTION: {} FROM THE DATABASE", standard, section);
             transaction = session.beginTransaction();
-            Query<Grade> query = session.createQuery("FROM Grade WHERE standard = :standard AND section = :section", Grade.class);
+            Query<Grade> query = session.createQuery("FROM Grade WHERE standard = " +
+                    ":standard AND section = :section", Grade.class);
             query.setParameter("standard", standard);
             query.setParameter("section", section);
             transaction.commit();
             return query.uniqueResult();
         } catch (NonUniqueResultException e) {
             HibernateConnection.rollbackTransaction(transaction);
-            throw new SchoolManagementException("Multiple grades found for standard " + standard + " and section " + section, e);
+            throw new SchoolManagementException("Multiple grades found for standard "
+                    + standard + " and section " + section, e);
         } catch (HibernateException e) {
             HibernateConnection.rollbackTransaction(transaction);
-            throw new SchoolManagementException("Something went wrong while checking the grade details of standard " + standard + " and section " + section, e);
+            throw new SchoolManagementException("Something went wrong while checking the" +
+                    " grade details of standard " + standard + " and section " + section, e);
         }
     }
 
@@ -93,7 +101,6 @@ public class GradeDao {
      * This method uses Hibernate to retrieve all the
      * records of standards and sections available in the Grade table.
      * </p>
-     *
      * @return
      *   all standards and sections along with their grade id available in the grade table.
      * @throws SchoolManagementException
@@ -101,6 +108,7 @@ public class GradeDao {
      */
     public List<Grade> getDetails() throws SchoolManagementException {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            logger.debug("PROCESS STARTED: FETCHING ALL GRADE DETAILS FROM THE DATABASE");
             return session.createQuery("FROM Grade").list();
         } catch (HibernateException e) {
             throw new SchoolManagementException("Something went wrong while fetching the grade details.", e);
@@ -123,6 +131,7 @@ public class GradeDao {
      */
     public Grade findGradeById(int id) throws SchoolManagementException {
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            logger.debug("PROCESS STARTED: FETCHING A GRADE DETAILS OF ID: {} FROM THE DATABASE" , id);
             Grade grade = session.get(Grade.class, id);
             if (null != grade) {
                 Hibernate.initialize(grade.getStudents());
@@ -150,6 +159,7 @@ public class GradeDao {
     public boolean isRemoveGrade(int id) throws SchoolManagementException {
         Transaction transaction = null;
         try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            logger.debug("PROCESS STARTED: REMOVING A GRADE DETAILS OF ID: {} FROM THE DATABASE" , id);
             transaction = session.beginTransaction();
             Grade grade = session.get(Grade.class, id);
             if (null != grade) {
@@ -164,7 +174,8 @@ public class GradeDao {
             }
         } catch (HibernateException e) {
             HibernateConnection.rollbackTransaction(transaction);
-            throw new SchoolManagementException("Something went wrong while removing the grade details " + id, e);
+            throw new SchoolManagementException("Something went wrong while removing the grade details "
+                    + id, e);
         }
     }
 }

@@ -59,8 +59,14 @@ public class Grade {
     public void setStandard(int standard) {
         this.standard = standard;
     }
+    public int getStandard() {
+        return standard;
+    }
     public void setSection(String section) {
         this.section = section;
+    }
+    public String getSection() {
+        return section;
     }
     public void setStudents(Set<Student> students) {
         this.students = students;

@@ -55,7 +55,6 @@ public class Admin {
         adminDetails.append("\n\n\t\tADMIN DETAILS ");
         adminDetails.append("\nAdmin Id: ").append(id);
         adminDetails.append("\nAdmin Name: ").append(name);
-        //teacherDetails.append("\nHandling subject: ").append(subject);
         return adminDetails.toString();
     }
 }
