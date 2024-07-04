@@ -1,26 +1,26 @@
 package com.i2i.sma.controller;
 
 import java.util.List;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.i2i.sma.dto.RequestTeacherDto;
+import com.i2i.sma.dto.ResponseTeacherDto;
+import com.i2i.sma.dto.ViewTeacherDto;
 import com.i2i.sma.exception.SchoolManagementException;
-import com.i2i.sma.models.Grade;
-import com.i2i.sma.models.Teacher;
 import com.i2i.sma.service.TeacherService;
-import com.i2i.sma.utils.DataValidationUtil;
+
 /**
  * <p>
  * This class is responsible for managing teacher records.
@@ -31,10 +31,9 @@ import com.i2i.sma.utils.DataValidationUtil;
 @RestController
 @RequestMapping("sma/api/v1.0/teachers")
 public class TeacherController {
-    private static Scanner scanner = new Scanner(System.in);
     private static final Logger logger = LoggerFactory.getLogger(TeacherController.class);
     @Autowired
-    private TeacherService teacherService ;
+    private TeacherService teacherService;
 
     /**
      * <p>
@@ -42,71 +41,22 @@ public class TeacherController {
      * It prompts the user to enter the teacher's name, handling subject, standards and sections.
      * After collecting the information from the user, it validates whether the input from user
      * is in correct format.For example :
-     *         checks whether entered section contains a single letter alphabet,
-     *         checks whether entered standard contains only numbers.
+     * checks whether entered section contains a single letter alphabet,
+     * checks whether entered standard contains only numbers.
      * After validations, it adds the teacher to the database.
      * Once the teacher is successfully added, it prints out the teacher's details and a success message.
      * </p>
      */
-    @PostMapping("/addTeacher")
-    public Teacher addTeacher() {
-        String name;
-        String subject;
-        int standard;
-        String section;
-        Set<Grade> grades = new HashSet<>(0);
-        while (true) {
-            System.out.println("Enter the teacher name: ");
-            name = scanner.next();
-            if (!DataValidationUtil.validateString(name)) {
-                System.out.println("PLEASE ENTER A PROPER TEACHER NAME. MUST BE ONLY ALPHABETS");
-                continue;
-            }
-            break;
-        }
-
-        while (true) {
-            System.out.println("Enter the teacher's subject: ");
-            subject = scanner.next();
-            if (!DataValidationUtil.validateString(subject)) {
-                System.out.println("PLEASE ENTER THE PROPER SUBJECT NAME. MUST BE ONLY ALPHABETS");
-                continue;
-            }
-            break;
-        }
+    @PostMapping
+    public ResponseEntity<ResponseTeacherDto> addTeacher(@RequestBody RequestTeacherDto requestTeacherDto) {
         try {
-            while (true) {
-                System.out.println("Enter the class : ");
-                standard = scanner.nextInt();
-                while (true) {
-                    System.out.println("Enter your Section : ");
-                    section = scanner.next();
-                    if (!DataValidationUtil.validateString(section)) {
-                        System.out.println("PLEASE ENTER A VALID SECTION. MUST BE ONLY ALPHABETS");
-                        continue;
-                    }
-                    break;
-                }
-                Grade gradeDetails = teacherService.getTeacherGrade(standard, section);
-                grades.add(gradeDetails);
-                System.out.println("\nDo you handle any other grade: YES or NO ");
-                String handlingGrade = scanner.next();
-                if (handlingGrade.equals("YES")) {
-                    continue;
-                } else if (handlingGrade.equals("NO")) {
-                    break;
-                }
-            }
-            Teacher teacherDetails = teacherService.addNewTeacher(name, subject, grades);
-            System.out.println(teacherDetails);
-            System.out.println("\nTeacher data has been added successfully");
-            logger.info("TEACHER DETAILS OF NAME: {} ADDED SUCCESSFULLY ", name);
-            return teacherDetails;
+            ResponseTeacherDto teacherDetails = teacherService.addNewTeacher(requestTeacherDto);
+            logger.info("TEACHER DETAILS OF NAME: {} ADDED SUCCESSFULLY ", teacherDetails.getName());
+            return new ResponseEntity<>(teacherDetails, HttpStatus.CREATED);
         } catch (SchoolManagementException e) {
-            System.out.println(e.getMessage());
             logger.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
     /**
@@ -114,25 +64,22 @@ public class TeacherController {
      * This method handles displaying all teacher record along with their allocated cabin details.
      * It calls fetchteacher method and displays the teacher details.
      */
-    @GetMapping("/viewTeachers")
-    public List<Teacher> viewTeachers() {
+    @GetMapping
+    public ResponseEntity<List<ViewTeacherDto>> viewTeachers() {
         try {
-            List<Teacher> Details = teacherService.fetchTeachers();
+            List<ViewTeacherDto> Details = teacherService.fetchTeachers();
             if (null != Details) {
-                for (Teacher teacher : Details) {
-                    System.out.println(teacher);
-                }
                 logger.info("ALL TEACHERS DATA ARE DISPLAYED SUCCESSFULLY");
+                return new ResponseEntity<>(Details, HttpStatus.OK);
             } else {
-                System.out.println("NO TEACHER DATA FOUND IN THE DATABASE");
                 logger.warn("NO TEACHERS FOUND IN DATABASE");
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return Details;
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
             logger.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
     /**
@@ -144,24 +91,21 @@ public class TeacherController {
      * For example: provide valid teacher id.
      * </p>
      */
-    @PostMapping("/{id}")
-    public Optional<Teacher> searchTeacher(@PathVariable int id) {
-        System.out.println("Enter the ID to search: ");
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseTeacherDto> searchTeacher(@PathVariable int id) {
         try {
-            Optional<Teacher> searchedTeacher = teacherService.findTeacher(id);
-            if (searchedTeacher.isPresent()) {
-                System.out.println(searchedTeacher);
+            ResponseTeacherDto searchedTeacher = teacherService.findTeacher(id);
+            if (null != searchedTeacher) {
                 logger.info("TEACHER ID: {} FOUND SUCCESSFULLY", id);
+                return new ResponseEntity<>(searchedTeacher, HttpStatus.OK);
             } else {
-                System.out.println("THERE IS NO SUCH TEACHER " + id + " EXIST ");
                 logger.warn("CANNOT FIND TEACHER ID: {}", id);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return searchedTeacher;
         } catch (SchoolManagementException e) {
-            System.out.println(e.getMessage());
             logger.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
     /**
@@ -174,17 +118,21 @@ public class TeacherController {
      * For example: provide valid teacher id.
      * </p>
      */
-    @DeleteMapping("/deleteTeacher/{id}")
-    public void removeTeacher(@PathVariable int id) {
-        System.out.println("Enter the ID to delete: ");
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removeTeacher(@PathVariable int id) {
         try {
-            System.out.println((teacherService.isDeleteTeacher(id)) ? "\nTEACHER ID " + id +
-                    " IS REMOVED SUCCESSFULLY ALONG WITH THEIR ASSOCIATED CABIN."
-                    : "\nERROR WHILE DELETING TEACHER ID " + id +
-                    "\nPLEASE CHECK THE TEACHER ID PROPERLY");
+            if (teacherService.isDeleteTeacher(id)) {
+                logger.info("\nTEACHER ID " + id + " REMOVED SUCCESSFULLY");
+                return new ResponseEntity<>("TEACHER DELETED SUCCESSFULLY",HttpStatus.ACCEPTED);
+
+            } else {
+                logger.info("\nERROR WHILE DELETING TEACHERID " + id +
+                        "\nPLEASE CHECK THE ID PROPERLY");
+                return new ResponseEntity<>("NO SUCH TEACHER FOUND",HttpStatus.NO_CONTENT);
+            }
         } catch (SchoolManagementException e) {
-            System.out.println(e.getMessage());
             logger.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -1,20 +1,22 @@
 package com.i2i.sma.controller;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.i2i.sma.models.Grade;
-import com.i2i.sma.service.GradeService;
+import com.i2i.sma.dto.ResponseGradeDto;
+import com.i2i.sma.dto.ViewGradeDto;
 import com.i2i.sma.exception.SchoolManagementException;
+import com.i2i.sma.service.GradeService;
 
 @RestController
 @RequestMapping("sma/api/v1.0/grades")
@@ -22,7 +24,6 @@ public class GradeController {
 
     @Autowired
     private GradeService gradeService;
-    private static Scanner scanner = new Scanner(System.in);
     private static final Logger logger = LoggerFactory.getLogger(GradeController.class);
 
     /**
@@ -31,25 +32,21 @@ public class GradeController {
      * It calls fetchGradeDetails method and displays the all grade details.
      * </p>
      */
-    @GetMapping("/viewGrades")
-    public List<Grade> viewGrades() {
+    @GetMapping
+    public ResponseEntity<List<ResponseGradeDto>> viewGrades() {
         try {
-            List<Grade> Details = gradeService.fetchGradeDetails();
+            List<ResponseGradeDto> Details = gradeService.fetchGradeDetails();
             if (null != Details) {
-                for (Grade grade : Details) {
-                    System.out.println(grade);
-                }
                 logger.info("ALL GRADES DATA ARE DISPLAYED SUCCESSFULLY");
+                return (new ResponseEntity<>(Details, HttpStatus.OK));
             } else {
-                System.out.println("NO GRADE DETAILS FOUND IN THE DATABASE");
                 logger.warn("NO GRADES FOUND IN DATABASE");
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return Details;
         } catch (SchoolManagementException e) {
-            System.out.println(e.getMessage());
             logger.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
     /**
@@ -61,25 +58,22 @@ public class GradeController {
      * For example: provide valid grade id.
      * </p>
      */
-    @GetMapping("/searchGrade")
-    public Optional<Grade> searchGrade() {
-        System.out.println("Enter the ID to search: ");
-        int id = scanner.nextInt();
+    @GetMapping("/{id}")
+    public ResponseEntity<?> searchGrade(@PathVariable int id) {
         try {
-            Optional<Grade> searchedGradeDetails = gradeService.fetchGradeById(id);
-            if (searchedGradeDetails.isPresent()) {
-                System.out.println(searchedGradeDetails);
+            ViewGradeDto searchedGradeDetails = gradeService.fetchGradeById(id);
+            if (null != searchedGradeDetails) {
                 logger.info("GRADE ID: {} FOUND SUCCESSFULLY", id);
+                return new ResponseEntity<>(searchedGradeDetails, HttpStatus.OK);
             } else {
-                System.out.println("THERE IS NO SUCH GRADE " + id + " EXIST ");
                 logger.warn("CANNOT FIND GRADE ID: {}", id);
+                return new ResponseEntity<>("NO SUCH GRADE FOUND",HttpStatus.NO_CONTENT);
             }
-            return searchedGradeDetails;
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
             logger.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
     /**
@@ -92,17 +86,21 @@ public class GradeController {
      * For example: provide valid grade id.
      * </p>
      */
-    @DeleteMapping("/deleteGrade")
-    public void removeGrade() {
-        System.out.println("Enter the grade ID to be deleted: ");
-        int id = scanner.nextInt();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removeGrade(@PathVariable int id) {
         try {
-            System.out.println((gradeService.isDeleteGrade(id)) ? "\nGRADE ID "
-                    + id + " IS REMOVED ALONG WITH THE STUDENTS PRESENT IN IT."
-                    : "\nERROR WHILE DELETING GRADE ID " + id + "\nPLEASE CHECK THE GRADE ID PROPERLY");
+            if(gradeService.isDeleteGrade(id)){
+                logger.info("\nGRADE ID " + id + " REMOVED SUCCESSFULLY");
+                return new ResponseEntity<>("GRADE DELETE SUCCESSFULLY",HttpStatus.ACCEPTED);
+
+            } else {
+                logger.info( "\nERROR WHILE DELETING GRADE ID " + id +
+                        "\nPLEASE CHECK THE ID PROPERLY");
+                return new ResponseEntity<>("NO SUCH GRADE FOUND",HttpStatus.NO_CONTENT);
+            }
         } catch (SchoolManagementException e) {
-            System.out.println(e.getMessage());
             logger.error(e.getMessage(), e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

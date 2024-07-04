@@ -55,6 +55,9 @@ public class Student {
     public void setDob(LocalDate dob) {
         this.dob = dob;
     }
+    public LocalDate getDob() {
+        return dob;
+    }
 
     public void setGrade(Grade grade) {
         this.grade = grade;
