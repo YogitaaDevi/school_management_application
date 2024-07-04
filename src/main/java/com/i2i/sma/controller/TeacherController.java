@@ -65,7 +65,7 @@ public class TeacherController {
      * It calls fetchteacher method and displays the teacher details.
      */
     @GetMapping
-    public ResponseEntity<List<ViewTeacherDto>> viewTeachers() {
+    public ResponseEntity<?> viewTeachers() {
         try {
             List<ViewTeacherDto> Details = teacherService.fetchTeachers();
             if (null != Details) {
@@ -73,7 +73,7 @@ public class TeacherController {
                 return new ResponseEntity<>(Details, HttpStatus.OK);
             } else {
                 logger.warn("NO TEACHERS FOUND IN DATABASE");
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>("NO TEACHER DATA FOUND", HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
@@ -92,7 +92,7 @@ public class TeacherController {
      * </p>
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseTeacherDto> searchTeacher(@PathVariable int id) {
+    public ResponseEntity<?> searchTeacher(@PathVariable int id) {
         try {
             ResponseTeacherDto searchedTeacher = teacherService.findTeacher(id);
             if (null != searchedTeacher) {
@@ -100,7 +100,7 @@ public class TeacherController {
                 return new ResponseEntity<>(searchedTeacher, HttpStatus.OK);
             } else {
                 logger.warn("CANNOT FIND TEACHER ID: {}", id);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>("NO SUCH TEACHER FOUND ON ID: " + id, HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);
@@ -128,7 +128,7 @@ public class TeacherController {
             } else {
                 logger.info("\nERROR WHILE DELETING TEACHERID " + id +
                         "\nPLEASE CHECK THE ID PROPERLY");
-                return new ResponseEntity<>("NO SUCH TEACHER FOUND",HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>("NO SUCH TEACHER FOUND ON ID: " + id, HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);

@@ -69,7 +69,7 @@ public class StudentController {
      * </p>
      */
     @GetMapping
-    public ResponseEntity<List<ViewStudentDto>> viewStudents() {
+    public ResponseEntity<?> viewStudents() {
         try {
             List<ViewStudentDto> Details = studentService.fetchStudents();
             if (null != Details) {
@@ -77,7 +77,7 @@ public class StudentController {
                 return new ResponseEntity<>(Details, HttpStatus.OK);
             } else {
                 logger.warn("NO STUDENTS FOUND IN DATABASE");
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>("NO STUDENT DATA FOUND", HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
@@ -89,7 +89,7 @@ public class StudentController {
     /**
      * <p>
      * This method handles searching of students record based on the student id.
-     * It gets id as a pathvariable parameter.
+     * It gets id as a path variable parameter.
      * Then it retrieves data of corresponding student id and display it with a succes message.
      * If the given id is wrong, it displays a warning message.
      * For example: provide valid student id.
@@ -102,16 +102,16 @@ public class StudentController {
      *                                      3. age for given dob
      *                                      4. grade details that has specified standard and section
      */
-    @GetMapping("{id}")
-    public ResponseEntity<ResponseStudentDto> searchStudent(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> searchStudent(@PathVariable int id) {
         try {
             ResponseStudentDto searchedStudent = studentService.findStudent(id);
             if (null != searchedStudent) {
                 logger.info("STUDENT ID: {} FOUND SUCCESSFULLY", id);
                 return new ResponseEntity<>(searchedStudent, HttpStatus.OK);
             } else {
-                logger.warn("CANNOT FIND STUDENT OF ID: ", id);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                logger.warn("CANNOT FIND STUDENT OF ID: {}", id);
+                return new ResponseEntity<>("NO SUCH STUDENT FOUND ON ID: " + id, HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);
@@ -135,17 +135,17 @@ public class StudentController {
         try {
             if(studentService.isDeleteStudent(id)){
                 logger.info("\nSTUDENT ID " + id + " REMOVED SUCCESSFULLY");
-                return new ResponseEntity<>("STUDENT DELETED SUCCESSFULLY", HttpStatus.ACCEPTED);
+                return new ResponseEntity<>("STUDENT DELETED SUCCESSFULLY" + id, HttpStatus.ACCEPTED);
 
             } else {
                 logger.info( "\nERROR WHILE DELETING STUDENT ID " + id +
                         "\nPLEASE CHECK THE STUDENT ID PROPERLY");
+                return new ResponseEntity<>("NO SUCH STUDENT FOUND ON ID: " + id, HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
+        }
     }
 }

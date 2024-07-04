@@ -41,7 +41,7 @@ public class GradeController {
                 return (new ResponseEntity<>(Details, HttpStatus.OK));
             } else {
                 logger.warn("NO GRADES FOUND IN DATABASE");
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);
@@ -67,7 +67,7 @@ public class GradeController {
                 return new ResponseEntity<>(searchedGradeDetails, HttpStatus.OK);
             } else {
                 logger.warn("CANNOT FIND GRADE ID: {}", id);
-                return new ResponseEntity<>("NO SUCH GRADE FOUND",HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>("NO SUCH GRADE FOUND ON ID: " + id, HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             System.out.println(e.getMessage());
@@ -91,12 +91,11 @@ public class GradeController {
         try {
             if(gradeService.isDeleteGrade(id)){
                 logger.info("\nGRADE ID " + id + " REMOVED SUCCESSFULLY");
-                return new ResponseEntity<>("GRADE DELETE SUCCESSFULLY",HttpStatus.ACCEPTED);
-
+                return new ResponseEntity<>("SUCCESSFULLY DELETED OF GRADE ID: " + id, HttpStatus.ACCEPTED);
             } else {
                 logger.info( "\nERROR WHILE DELETING GRADE ID " + id +
                         "\nPLEASE CHECK THE ID PROPERLY");
-                return new ResponseEntity<>("NO SUCH GRADE FOUND",HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>("NO SUCH GRADE FOUND ON ID: " + id, HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);

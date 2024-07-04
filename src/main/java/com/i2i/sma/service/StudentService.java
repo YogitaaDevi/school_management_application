@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +80,7 @@ public class StudentService implements StudentServiceInterface {
         try {
             List<Student> students = studentRepository.findAll();
             if (!students.isEmpty()) {
-                logger.debug("PROCESS STARTED: FETCHING ALL STUDENT DETAILS");
+                logger.debug("PROCESS STARTED: FETCHING ALL STUDENTS DETAILS");
                 List<ViewStudentDto> allStudents = new ArrayList<>();
                 for (Student student : students) {
                     allStudents.add(new ViewStudentDto(student));

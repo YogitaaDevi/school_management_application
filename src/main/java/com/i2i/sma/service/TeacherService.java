@@ -1,13 +1,24 @@
 package com.i2i.sma.service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.i2i.sma.dto.*;
+import com.i2i.sma.dto.RequestGradeDto;
+import com.i2i.sma.dto.RequestTeacherDto;
+import com.i2i.sma.dto.ResponseCabinDto;
+import com.i2i.sma.dto.ResponseGradeDto;
+import com.i2i.sma.dto.ResponseTeacherDto;
+import com.i2i.sma.dto.ViewTeacherDto;
+
 import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.models.Cabin;
 import com.i2i.sma.models.Grade;
@@ -66,6 +77,8 @@ public class TeacherService implements TeacherServiceInterface {
         cabin.setTeacher(teacher);
         teacher.setCabin(cabin);
         try {
+            logger.debug("PROCESS STARTED: INSERTING TEACHER DETAILS OF NAME: {} ," +
+                    "SUBJECT: {}, GRADES: {}", teacher.getName(), teacher.getSubject(), teacher.getGrades());
             Teacher teacherDetails = teacherRepository.save(teacher);
             return (new ResponseTeacherDto(teacherDetails, responseGrade,
                     new ResponseCabinDto(teacherDetails.getCabin().getId(),
@@ -100,6 +113,7 @@ public class TeacherService implements TeacherServiceInterface {
         try {
             List<Teacher> teachers = teacherRepository.findAll();
             if (!teachers.isEmpty()) {
+                logger.debug("PROCESS STARTED: FETCHING ALL TEACHERS DETAILS");
                 List<ViewTeacherDto> allTeachers = new ArrayList<>();
                 for (Teacher teacher : teachers) {
                     allTeachers.add(new ViewTeacherDto(teacher));
@@ -125,6 +139,7 @@ public class TeacherService implements TeacherServiceInterface {
         try {
             Optional<Teacher> searchedTeacher = teacherRepository.findById(id);
             if (searchedTeacher.isPresent()) {
+                logger.debug("PROCESS STARTED: FETCHING A TEACHER DETAILS OF ID {}" , id);
                 Set<ResponseGradeDto> grades = new HashSet<>();
                 for (Grade grade : searchedTeacher.get().getGrades()) {
                     grades.add(new ResponseGradeDto(grade));
@@ -150,6 +165,7 @@ public class TeacherService implements TeacherServiceInterface {
     public boolean isDeleteTeacher(int id) throws SchoolManagementException {
         Optional<Teacher> teacher = teacherRepository.findById(id);
         if (teacher.isPresent()) {
+            logger.debug("PROCESS STARTED: DELETING A TEACHER DETAILS OF ID {}" , id);
             teacherRepository.deleteById(id);
             return true;
         }
