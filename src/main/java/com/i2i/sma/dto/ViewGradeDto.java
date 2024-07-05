@@ -1,0 +1,23 @@
+package com.i2i.sma.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Set;
+
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ViewGradeDto {
+
+    private int id;
+    private int standard;
+    private String section;
+    private Set<ViewStudentDto> students;
+    private Set<ViewTeacherDto> teachers;
+}

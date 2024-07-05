@@ -1,0 +1,28 @@
+# This variable refers the users to mention the appliaction name
+spring.application.name=
+
+# This variable is to initialize a database using Hibernate automatically
+# The value must be from any of below 4 types of operations:
+#     create, create-drop, validate, and update
+spring.jpa.hibernate.ddl-auto=
+
+# This variable refers to the classname of the JDBC driver to interact with your database.
+spring.datasource.driver-class-name=
+
+# This variable allows you to specify the database platform to use with JPA (Java Persistence API).
+# For example : org.postgresql.Driver
+spring.jpa.database-platform=
+
+# This variable is where users have to mention the database url
+# The url must be in the format of:
+#   jdbc:<CONNECTION>://<HOSTNAME>:<PORT_NUMBER>/<DATABASE_NAME>
+#   For example
+#     jdbc:postgresql://localhost:5432/Student_Database
+spring.datasource.url=
+
+# This variable refers the users to mention the database username
+spring.datasource.username=
+
+# This variable refers the users to mention the database password
+spring.datasource.password=
+

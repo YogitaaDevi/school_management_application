@@ -1,0 +1,45 @@
+package com.i2i.sma.models;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+/**
+ * <p>
+ * This class is responsible for maintaining methods to get and set the attributes such as teacher's id, name, subject, schoolId and cabindetails.
+ * These attributes can be accessed throughout the application.
+ * </p>
+ */
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "teachers")
+public class Teacher {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private int id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "subject", nullable = false)
+    private String subject;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "teacher")
+    private Cabin cabin;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "teacher_grade_association",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "grade_id")
+    )
+    private Set<Grade> grades = new HashSet<>(0);
+}
