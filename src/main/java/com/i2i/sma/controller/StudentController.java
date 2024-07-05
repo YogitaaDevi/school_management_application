@@ -38,17 +38,11 @@ public class StudentController {
     /**
      * <p>
      * This method is responsible for adding a new student record with the specified grade.
-     * Once the student is successfully added, it prints out the student's details and a success message.
+     * Once the student is successfully added, it prints out the student's details and
+     * a success message.
      * </p>
-     * @param requestStudentDto
-     *   that contains student details of : 1. name
-     *                                      2. date of birth
-     *                                      3. grade details that has specified standard and section
-     * @return studenDetail
-     *   that contains student details of : 1. name
-     *                                      2. date of birth
-     *                                      3. age for given dob
-     *                                      4. grade details that has specified standard and section
+     * @param requestStudentDto {@link RequestStudentDto}
+     * @return studentDetail {@link ResponseStudentDto}
      */
     @PostMapping
     public ResponseEntity<ResponseStudentDto> addStudent(@RequestBody RequestStudentDto requestStudentDto) {
@@ -67,6 +61,7 @@ public class StudentController {
      * This method handles displaying all students record.
      * It calls fetchStudent method and displays the all student details available in the Grade.
      * </p>
+     * @return list of all students {@link ViewStudentDto}
      */
     @GetMapping
     public ResponseEntity<?> viewStudents() {
@@ -90,17 +85,13 @@ public class StudentController {
      * <p>
      * This method handles searching of students record based on the student id.
      * It gets id as a path variable parameter.
-     * Then it retrieves data of corresponding student id and display it with a succes message.
+     * Then it retrieves data of corresponding student based on id and displays it.
      * If the given id is wrong, it displays a warning message.
      * For example: provide valid student id.
      * </p>
      * @param id
      *   a unique identifier that represents each student
-     * @return searchedStudent
-     *   that contains student details of : 1. name
-     *                                      2. date of birth
-     *                                      3. age for given dob
-     *                                      4. grade details that has specified standard and section
+     * @return searchedStudent {@link ResponseStudentDto} if the given id found. Else null.
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> searchStudent(@PathVariable int id) {
@@ -122,8 +113,8 @@ public class StudentController {
     /**
      * <p>
      * This method handles deleting of students record based on the student id.
-     * It gets id as a pathvariable parameter.
-     * Then it deletes data of corresponding student id and display a succes message.
+     * It gets id as a path variable parameter.
+     * Then it deletes data of corresponding student id and display a success message.
      * If the given id is wrong, it displays a warning message.
      * For example: provide valid student id.
      * </p>

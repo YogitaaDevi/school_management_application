@@ -49,14 +49,18 @@ public class GradeController {
         }
     }
 
+
     /**
      * <p>
-     * This method handles searching of Grade's specific standard and section record
-     * along with the students. It prompts the user to enter the grade id they wish to see.
-     * After getting id from the user, it retrieves data and display it to the user.
+     * This method handles searching of specific Grade details along with the students and teachers.
+     * It gets id as a path variable parameter.
+     * After getting id, it retrieves data and display it to the user.
      * If the user given wrong id, it displays a warning message.
      * For example: provide valid grade id.
      * </p>
+     * @param id
+     *   a unique identifier that represents each student
+     * @return searchedGradeDetails {@link ViewGradeDto} if the given id found. Else null
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> searchGrade(@PathVariable int id) {
@@ -79,12 +83,14 @@ public class GradeController {
     /**
      * <p>
      * This method handles removing standard and section along with students who are assigned to it.
-     * It prompts the user to enter grade id they wish to remove the details.
+     * It gets id as a path variable parameter.
      * After getting the input, it deletes the particular data.
      * After removing, it displays a successful message.
      * If the user given wrong standard and section, it displays a warning message.
      * For example: provide valid grade id.
      * </p>
+     * @param id
+     *   a unique identifier that represents each student
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeGrade(@PathVariable int id) {

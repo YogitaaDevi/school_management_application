@@ -38,14 +38,10 @@ public class TeacherController {
     /**
      * <p>
      * This method handles the add a new teacher record and allocates a cabin for each of them.
-     * It prompts the user to enter the teacher's name, handling subject, standards and sections.
-     * After collecting the information from the user, it validates whether the input from user
-     * is in correct format.For example :
-     * checks whether entered section contains a single letter alphabet,
-     * checks whether entered standard contains only numbers.
-     * After validations, it adds the teacher to the database.
      * Once the teacher is successfully added, it prints out the teacher's details and a success message.
      * </p>
+     * @param requestTeacherDto {@link ResponseTeacherDto}
+     * @return teacherDetails {@link ResponseTeacherDto}
      */
     @PostMapping
     public ResponseEntity<ResponseTeacherDto> addTeacher(@RequestBody RequestTeacherDto requestTeacherDto) {
@@ -63,6 +59,7 @@ public class TeacherController {
      * <p>
      * This method handles displaying all teacher record along with their allocated cabin details.
      * It calls fetchteacher method and displays the teacher details.
+     * @return list of all teachers {@link ViewTeacherDto}
      */
     @GetMapping
     public ResponseEntity<?> viewTeachers() {
@@ -82,14 +79,18 @@ public class TeacherController {
         }
     }
 
+
     /**
      * <p>
      * This method handles searching of teacher's record.
-     * It prompts the user to enter the id of the teacher they wish to see the details.
-     * After getting id from the user, it retrieves data and display it to the user.
+     * It gets id as a path variable parameter.
+     * After getting id, it retrieves data and display it to the user.
      * If the user given wrong id, it displays a warning message.
      * For example: provide valid teacher id.
      * </p>
+     * @param id a unique identifier that represents each teacher
+     * @return searchedTeacher {@link ResponseTeacherDto} if the given id found
+     * Else null
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> searchTeacher(@PathVariable int id) {
@@ -111,12 +112,13 @@ public class TeacherController {
     /**
      * <p>
      * This method handles removing teachers along with their allocated cabin from record.
-     * It prompts the user to enter the id of the teacher they wish to remove the details of.
-     * After getting id from the user, it deletes the particular data.
+     * It gets id as a path variable parameter.
+     * After getting id, it deletes the particular data.
      * After removing, it displays a successful message.
      * If the user given wrong id, it displays a warning message.
      * For example: provide valid teacher id.
      * </p>
+     * @param id a unique identifier that represents each teacher
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeTeacher(@PathVariable int id) {
