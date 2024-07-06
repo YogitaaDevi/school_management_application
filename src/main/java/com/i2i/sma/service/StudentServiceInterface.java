@@ -6,6 +6,7 @@ import com.i2i.sma.dto.ViewStudentDto;
 import com.i2i.sma.exception.SchoolManagementException;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * <p>
@@ -55,7 +56,7 @@ public interface StudentServiceInterface {
      * @return Student {@link ResponseStudentDto}  if id found. Else null.
      * @throws SchoolManagementException this occurs when anything went wrong while searching a data.
      */
-    ResponseStudentDto findStudent(int id) throws SchoolManagementException;
+    ResponseStudentDto findStudent(UUID id) throws SchoolManagementException;
 
     /**
      * <p>
@@ -78,5 +79,5 @@ public interface StudentServiceInterface {
      * @return true if the specified student id is deleted successfully .Else returns false
      * @throws SchoolManagementException this occurs when anything went wrong while removing a data.
      */
-    boolean isDeleteStudent(int id) throws SchoolManagementException;
+    boolean isDeleteStudent(UUID id) throws SchoolManagementException;
 }

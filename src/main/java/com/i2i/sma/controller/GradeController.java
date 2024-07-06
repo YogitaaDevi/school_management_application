@@ -1,6 +1,7 @@
 package com.i2i.sma.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class GradeController {
      * </p>
      */
     @GetMapping
-    public ResponseEntity<List<ResponseGradeDto>> viewGrades() {
+    public ResponseEntity<?> viewGrades() {
         try {
             List<ResponseGradeDto> Details = gradeService.fetchGradeDetails();
             if (null != Details) {
@@ -41,7 +42,7 @@ public class GradeController {
                 return (new ResponseEntity<>(Details, HttpStatus.OK));
             } else {
                 logger.warn("NO GRADES FOUND IN DATABASE");
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("NO GRADES FOUND IN DATABASE",HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);
@@ -62,7 +63,7 @@ public class GradeController {
      * @return searchedGradeDetails {@link ViewGradeDto} if the given id found. Else null
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> searchGrade(@PathVariable int id) {
+    public ResponseEntity<?> searchGrade(@PathVariable UUID id) {
         try {
             ViewGradeDto searchedGradeDetails = gradeService.fetchGradeById(id);
             if (null != searchedGradeDetails) {
@@ -92,7 +93,7 @@ public class GradeController {
      *   a unique identifier that represents each student
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeGrade(@PathVariable int id) {
+    public ResponseEntity<?> removeGrade(@PathVariable UUID id) {
         try {
             if(gradeService.isDeleteGrade(id)){
                 logger.info("\nGRADE ID " + id + " REMOVED SUCCESSFULLY");

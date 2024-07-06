@@ -2,6 +2,7 @@ package com.i2i.sma.models;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,9 +23,9 @@ import lombok.*;
 public class Teacher {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    private int id;
+    private UUID id;
 
     @Column(name = "name", nullable = false)
     private String name;

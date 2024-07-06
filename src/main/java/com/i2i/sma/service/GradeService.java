@@ -1,10 +1,6 @@
 package com.i2i.sma.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +84,7 @@ public class GradeService implements GradeServiceInterface {
     /**
      * {@inheritDoc GradeServiceInterface }
      */
-    public ViewGradeDto fetchGradeById(int id) throws SchoolManagementException {
+    public ViewGradeDto fetchGradeById(UUID id) throws SchoolManagementException {
         try {
             Optional<Grade> grade = gradeRepository.findById(id);
             if (grade.isPresent()) {
@@ -112,7 +108,7 @@ public class GradeService implements GradeServiceInterface {
     /**
      * {@inheritDoc GradeServiceInterface }
      */
-    public boolean isDeleteGrade(int id) throws SchoolManagementException {
+    public boolean isDeleteGrade(UUID id) throws SchoolManagementException {
         try {
             Optional<Grade> grade = gradeRepository.findById(id);
             if (grade.isPresent()) {

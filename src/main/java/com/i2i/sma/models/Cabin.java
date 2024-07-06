@@ -10,6 +10,8 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.util.UUID;
+
 /**
  * <p>
  * This class is responsible for maintaining methods to get and set the attributes such as teacher details, cabin id and laptop id.
@@ -26,9 +28,9 @@ import lombok.*;
 public class Cabin {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    private int id;
+    private UUID id;
 
     @Column(name = "laptop_id", nullable = false)
     private int laptopId;

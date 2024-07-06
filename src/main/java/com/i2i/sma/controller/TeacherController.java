@@ -1,6 +1,7 @@
 package com.i2i.sma.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.i2i.sma.dto.*;
 import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.service.TeacherService;
+import com.i2i.sma.utils.DataValidationUtil;
 
 /**
  * <p>
@@ -36,11 +38,20 @@ public class TeacherController {
      * @return teacherDetails {@link ResponseTeacherDto}
      */
     @PostMapping
-    public ResponseEntity<ResponseTeacherDto> addTeacher(@RequestBody RequestTeacherDto requestTeacherDto) {
+    public ResponseEntity<?> addTeacher(@RequestBody RequestTeacherDto requestTeacherDto) {
         try {
-            ResponseTeacherDto teacherDetails = teacherService.addNewTeacher(requestTeacherDto);
-            logger.info("TEACHER DETAILS OF NAME: {} ADDED SUCCESSFULLY ", teacherDetails.getName());
-            return new ResponseEntity<>(teacherDetails, HttpStatus.CREATED);
+            if(!DataValidationUtil.validateString(requestTeacherDto.getName())) {
+                return new ResponseEntity<>("NAME MUST BE IN ALPHABETS (A-Z/a-z)", HttpStatus.BAD_REQUEST);
+            }
+            if (!DataValidationUtil.validateString(requestTeacherDto.getSubject())) {
+                return new ResponseEntity<>("SUBJECT MUST BE IN ALPHABETS (A-Z/a-z)", HttpStatus.BAD_REQUEST);
+            }
+            else{
+                logger.debug("ADDING THE TEACHER DETAILS OF NAME: {}", requestTeacherDto.getName());
+                ResponseTeacherDto teacherDetails = teacherService.addNewTeacher(requestTeacherDto);
+                logger.info("TEACHER DETAILS OF NAME: {} AND ID: {} ADDED SUCCESSFULLY ", teacherDetails.getName(), teacherDetails.getId());
+                return new ResponseEntity<>(teacherDetails, HttpStatus.CREATED);
+            }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -84,12 +95,13 @@ public class TeacherController {
      * Else null
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> searchTeacher(@PathVariable int id) {
+    public ResponseEntity<?> searchTeacher(@PathVariable UUID id) {
         try {
             ResponseTeacherDto searchedTeacher = teacherService.findTeacher(id);
             if (null != searchedTeacher) {
                 logger.info("TEACHER ID: {} FOUND SUCCESSFULLY", id);
-                return new ResponseEntity<>(searchedTeacher, HttpStatus.OK);
+                return new ResponseEntity<>("SEARCHED TEACHER DATA:\n"
+                        + searchedTeacher, HttpStatus.OK);
             } else {
                 logger.warn("CANNOT FIND TEACHER ID: {}", id);
                 return new ResponseEntity<>("NO SUCH TEACHER FOUND ON ID: "
@@ -113,11 +125,12 @@ public class TeacherController {
      * @return updatedStudent {@link ResponseStudentDto} if the given id found. Else null
      */
     @PutMapping
-    public ResponseEntity<?> updateStudent(@RequestBody ViewTeacherDto viewTeacherDto) {
+    public ResponseEntity<?> updateTeacher(@RequestBody ViewTeacherDto viewTeacherDto) {
         try {
             ResponseTeacherDto updatedTeacher = teacherService.upgradeTeacher(viewTeacherDto);
             if(null != updatedTeacher) {
-                return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);
+                return new ResponseEntity<>("UPDATED TEACHER DATA:\n"
+                        + updatedTeacher, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("NO SUCH TEACHER FOUND ON ID: " +
                         viewTeacherDto.getId(), HttpStatus.NOT_FOUND);
@@ -140,7 +153,7 @@ public class TeacherController {
      * @param id a unique identifier that represents each teacher
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> removeTeacher(@PathVariable int id) {
+    public ResponseEntity<String> removeTeacher(@PathVariable UUID id) {
         try {
             if (teacherService.isDeleteTeacher(id)) {
                 logger.info("\nTEACHER ID " + id + " REMOVED SUCCESSFULLY");

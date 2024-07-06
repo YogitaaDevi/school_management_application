@@ -1,6 +1,7 @@
 package com.i2i.sma.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,8 @@ import com.i2i.sma.dto.ResponseStudentDto;
 import com.i2i.sma.dto.ViewStudentDto;
 import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.service.StudentService;
+import com.i2i.sma.utils.DataValidationUtil;
+
 /**
  * <p>
  * This class is responsible for managing student records.
@@ -41,9 +44,20 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<?> addStudent(@RequestBody RequestStudentDto requestStudentDto) {
         try {
-            ResponseStudentDto studentDetail = studentService.addStudentToGrade(requestStudentDto);
-            logger.info("STUDENT DETAILS OF NAME: {} ADDED SUCCESSFULLY ", studentDetail.getName());
-            return new ResponseEntity<>(studentDetail, HttpStatus.CREATED);
+            if(!DataValidationUtil.validateString(requestStudentDto.getName())) {
+                return new ResponseEntity<>("NAME MUST BE IN ALPHABETS (A-Z/a-z)"
+                        , HttpStatus.BAD_REQUEST);
+            }
+            if (!DataValidationUtil.validateString(requestStudentDto.getGrade().getSection())) {
+                return new ResponseEntity<>("SECTION MUST BE IN ALPHABETS (A-Z/a-z)"
+                        , HttpStatus.BAD_REQUEST);
+            }
+            else {
+                logger.debug("ADDING THE STUDENT DETAILS OF NAME: {} ", requestStudentDto.getName());
+                ResponseStudentDto studentDetail = studentService.addStudentToGrade(requestStudentDto);
+                logger.info("STUDENT DETAILS OF NAME: {} AND ID: {} ADDED SUCCESSFULLY ", studentDetail.getName(), studentDetail.getId());
+                return new ResponseEntity<>(studentDetail, HttpStatus.CREATED);
+            }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);
             return new ResponseEntity<>("SOMETHING WENT WRONG WHILE INSERTING STUDENT DETAILS ",HttpStatus.INTERNAL_SERVER_ERROR);
@@ -88,12 +102,13 @@ public class StudentController {
      * @return searchedStudent {@link ResponseStudentDto} if the given id found. Else null.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> searchStudent(@PathVariable int id) {
+    public ResponseEntity<?> searchStudent(@PathVariable UUID id) {
         try {
             ResponseStudentDto searchedStudent = studentService.findStudent(id);
             if (null != searchedStudent) {
                 logger.info("STUDENT ID: {} FOUND SUCCESSFULLY", id);
-                return new ResponseEntity<>(searchedStudent, HttpStatus.OK);
+                return new ResponseEntity<>("SEARCHED STUDENT DATA:\n"
+                        + searchedStudent, HttpStatus.OK);
             } else {
                 logger.warn("CANNOT FIND STUDENT OF ID: {}", id);
                 return new ResponseEntity<>("NO SUCH STUDENT FOUND ON ID: " + id, HttpStatus.NOT_FOUND);
@@ -120,7 +135,7 @@ public class StudentController {
         try {
             ResponseStudentDto updatedStudent = studentService.upgradeStudent(viewStudentDto);
             if(null != updatedStudent) {
-                return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
+                return new ResponseEntity<>("UPDATED STUDENT DETAILS:\n" + updatedStudent, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("NO SUCH STUDENT FOUND ON ID: " +
                         viewStudentDto.getId(), HttpStatus.NOT_FOUND);
@@ -130,7 +145,6 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     /**
      * <p>
@@ -144,16 +158,18 @@ public class StudentController {
      *   a unique identifier that represents each student
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeStudent(@PathVariable int id) {
+    public ResponseEntity<?> removeStudent(@PathVariable UUID id) {
         try {
             if(studentService.isDeleteStudent(id)){
                 logger.info("\nSTUDENT ID " + id + " REMOVED SUCCESSFULLY");
-                return new ResponseEntity<>("SUCCESSFULLY DELETED STUDENT OF ID: " + id, HttpStatus.ACCEPTED);
+                return new ResponseEntity<>("SUCCESSFULLY DELETED STUDENT OF ID: "
+                        + id, HttpStatus.ACCEPTED);
 
             } else {
                 logger.info( "\nERROR WHILE DELETING STUDENT ID " + id +
                         "\nPLEASE CHECK THE STUDENT ID PROPERLY");
-                return new ResponseEntity<>("NO SUCH STUDENT FOUND ON ID: " + id, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("NO SUCH STUDENT FOUND ON ID: "
+                        + id, HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);

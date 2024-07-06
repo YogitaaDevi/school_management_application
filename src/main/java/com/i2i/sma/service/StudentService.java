@@ -3,6 +3,7 @@ package com.i2i.sma.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +84,7 @@ public class StudentService implements StudentServiceInterface {
     /**
      * {@inheritDoc StudentServiceInterface}
      */
-    public ResponseStudentDto findStudent(int id) throws SchoolManagementException {
+    public ResponseStudentDto findStudent(UUID id) throws SchoolManagementException {
         try {
             Optional<Student> student = studentRepository.findById(id);
             if (student.isPresent()) {
@@ -122,7 +123,7 @@ public class StudentService implements StudentServiceInterface {
     /**
      * {@inheritDoc StudentServiceInterface}
      */
-    public boolean isDeleteStudent(int id) throws SchoolManagementException {
+    public boolean isDeleteStudent(UUID id) throws SchoolManagementException {
         try {
             Optional<Student> student = studentRepository.findById(id);
             if (student.isPresent()) {

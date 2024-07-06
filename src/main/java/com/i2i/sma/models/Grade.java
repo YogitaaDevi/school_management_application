@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * <p>
@@ -23,9 +24,9 @@ import java.util.Set;
 public class Grade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "grade_id", nullable = false)
-    private int id;
+    private UUID id;
 
     @Column(name = "standard", nullable = false)
     private int standard;

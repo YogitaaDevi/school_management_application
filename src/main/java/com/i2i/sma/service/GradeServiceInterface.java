@@ -1,6 +1,7 @@
 package com.i2i.sma.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.i2i.sma.dto.RequestGradeDto;
 import com.i2i.sma.dto.ResponseGradeDto;
@@ -46,7 +47,7 @@ public interface GradeServiceInterface {
      * @return Grade details {@link ViewGradeDto}
      * @throws SchoolManagementException this occurs when anything went wrong while fetching a data.
      */
-    ViewGradeDto fetchGradeById(int id) throws SchoolManagementException;
+    ViewGradeDto fetchGradeById(UUID id) throws SchoolManagementException;
 
     /**
      * <p>
@@ -57,5 +58,5 @@ public interface GradeServiceInterface {
      * @return true if the specified grade is successfully deleted or else returns false.
      * @throws SchoolManagementException this occurs when anything went wrong while removing a data.
      */
-    boolean isDeleteGrade(int id) throws SchoolManagementException;
+    boolean isDeleteGrade(UUID id) throws SchoolManagementException;
 }

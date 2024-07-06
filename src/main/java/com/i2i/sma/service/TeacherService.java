@@ -1,11 +1,6 @@
 package com.i2i.sma.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +99,7 @@ public class TeacherService implements TeacherServiceInterface {
     /**
      * {@inheritDoc TeacherServiceInterface}
      */
-    public ResponseTeacherDto findTeacher(int id) throws SchoolManagementException {
+    public ResponseTeacherDto findTeacher(UUID id) throws SchoolManagementException {
         try {
             Optional<Teacher> searchedTeacher = teacherRepository.findById(id);
             if (searchedTeacher.isPresent()) {
@@ -148,7 +143,7 @@ public class TeacherService implements TeacherServiceInterface {
     /**
      * {@inheritDoc TeacherServiceInterface}
      */
-    public boolean isDeleteTeacher(int id) throws SchoolManagementException {
+    public boolean isDeleteTeacher(UUID id) throws SchoolManagementException {
         Optional<Teacher> teacher = teacherRepository.findById(id);
         if (teacher.isPresent()) {
             logger.debug("PROCESS STARTED: DELETING A TEACHER DETAILS OF ID {}" , id);

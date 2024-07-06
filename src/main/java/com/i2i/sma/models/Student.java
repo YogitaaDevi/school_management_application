@@ -1,6 +1,7 @@
 package com.i2i.sma.models;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.CascadeType;
@@ -25,9 +26,9 @@ import lombok.*;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    private int id;
+    private UUID id;
 
     @Column(name = "name", nullable = false)
     private String name;

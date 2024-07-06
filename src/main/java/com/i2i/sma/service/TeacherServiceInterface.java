@@ -1,6 +1,7 @@
 package com.i2i.sma.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.i2i.sma.dto.RequestTeacherDto;
 import com.i2i.sma.dto.ResponseTeacherDto;
@@ -51,7 +52,7 @@ public interface TeacherServiceInterface {
      * @return teacher {@link ResponseTeacherDto} if id found. Else null
      * @throws SchoolManagementException this occurs when anything went wrong while searching a data.
      */
-    ResponseTeacherDto findTeacher(int id) throws SchoolManagementException;
+    ResponseTeacherDto findTeacher(UUID id) throws SchoolManagementException;
 
     /**
      * <p>
@@ -72,5 +73,5 @@ public interface TeacherServiceInterface {
      * @return true if the teacher is deleted successfully or else returns false.
      * @throws SchoolManagementException this occurs when anything went wrong while removing a data.
      */
-    boolean isDeleteTeacher(int id) throws SchoolManagementException;
+    boolean isDeleteTeacher(UUID id) throws SchoolManagementException;
 }
