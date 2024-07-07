@@ -3,6 +3,7 @@ package com.i2i.sma.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.i2i.sma.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,14 @@ public class StudentController {
                 return new ResponseEntity<>("NAME MUST BE IN ALPHABETS (A-Z/a-z)"
                         , HttpStatus.BAD_REQUEST);
             }
+            if (!DateUtil.isValidateDate(requestStudentDto.getDob())){
+                return new ResponseEntity<>("DATE OF BIRTH MUST NOT BE GREATER THAN TODAY" +
+                        " AND NOT LESSER THAN 20 YEARS FROM TODAY", HttpStatus.BAD_REQUEST);
+            }
+            if (!DataValidationUtil.checkNumberRange(requestStudentDto.getGrade().getStandard())) {
+                return new ResponseEntity<>("STANDARD MUST BE IN NUMBER WITHIN 1-12"
+                        , HttpStatus.BAD_REQUEST);
+            }
             if (!DataValidationUtil.validateString(requestStudentDto.getGrade().getSection())) {
                 return new ResponseEntity<>("SECTION MUST BE IN ALPHABETS (A-Z/a-z)"
                         , HttpStatus.BAD_REQUEST);
@@ -55,12 +64,14 @@ public class StudentController {
             else {
                 logger.debug("ADDING THE STUDENT DETAILS OF NAME: {} ", requestStudentDto.getName());
                 ResponseStudentDto studentDetail = studentService.addStudentToGrade(requestStudentDto);
-                logger.info("STUDENT DETAILS OF NAME: {} AND ID: {} ADDED SUCCESSFULLY ", studentDetail.getName(), studentDetail.getId());
+                logger.info("STUDENT DETAILS OF NAME: {} AND ID: {} ADDED SUCCESSFULLY "
+                        , studentDetail.getName(), studentDetail.getId());
                 return new ResponseEntity<>(studentDetail, HttpStatus.CREATED);
             }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);
-            return new ResponseEntity<>("SOMETHING WENT WRONG WHILE INSERTING STUDENT DETAILS ",HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("SOMETHING WENT WRONG WHILE INSERTING STUDENT DETAILS "
+                    ,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -107,8 +118,7 @@ public class StudentController {
             ResponseStudentDto searchedStudent = studentService.findStudent(id);
             if (null != searchedStudent) {
                 logger.info("STUDENT ID: {} FOUND SUCCESSFULLY", id);
-                return new ResponseEntity<>("SEARCHED STUDENT DATA:\n"
-                        + searchedStudent, HttpStatus.OK);
+                return new ResponseEntity<>( searchedStudent, HttpStatus.OK);
             } else {
                 logger.warn("CANNOT FIND STUDENT OF ID: {}", id);
                 return new ResponseEntity<>("NO SUCH STUDENT FOUND ON ID: " + id, HttpStatus.NOT_FOUND);
@@ -135,7 +145,7 @@ public class StudentController {
         try {
             ResponseStudentDto updatedStudent = studentService.upgradeStudent(viewStudentDto);
             if(null != updatedStudent) {
-                return new ResponseEntity<>("UPDATED STUDENT DETAILS:\n" + updatedStudent, HttpStatus.OK);
+                return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("NO SUCH STUDENT FOUND ON ID: " +
                         viewStudentDto.getId(), HttpStatus.NOT_FOUND);

@@ -1,8 +1,9 @@
 package com.i2i.sma.utils;
 
-import java.time.format.DateTimeParseException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 
 /**
  * <p>
@@ -11,7 +12,8 @@ import java.time.Period;
  */
 public final class DateUtil {
 
-    private DateUtil() {}
+    private DateUtil() {
+    }
 
     /**
      * <p>
@@ -29,16 +31,20 @@ public final class DateUtil {
 
     /**
      * <p>
-     * This method is used to validate whether the parsedDate is valid or not in the specified format.
+     * This method is used to validate whether the parsedDate is not greater than
+     * current day and not lesser than 20 years from today.
      * </p>
      *
      * @param date a date that can be of any format.
      * @return true if it is in the correct format. otherwise it returns false.
      */
-    public static boolean isValidateDate(String date) {
+    public static boolean isValidateDate(LocalDate date) {
         try {
-            LocalDate parsedDate = LocalDate.parse(date);
-            return true;
+            if ((!date.isAfter(LocalDate.now())) &&
+                    (!date.isBefore(LocalDate.now().minus(20, ChronoUnit.YEARS)))) {
+                return true;
+            }
+            return false;
         } catch (DateTimeParseException e) {
             return false;
         }

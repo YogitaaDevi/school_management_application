@@ -100,8 +100,7 @@ public class TeacherController {
             ResponseTeacherDto searchedTeacher = teacherService.findTeacher(id);
             if (null != searchedTeacher) {
                 logger.info("TEACHER ID: {} FOUND SUCCESSFULLY", id);
-                return new ResponseEntity<>("SEARCHED TEACHER DATA:\n"
-                        + searchedTeacher, HttpStatus.OK);
+                return new ResponseEntity<>(searchedTeacher, HttpStatus.OK);
             } else {
                 logger.warn("CANNOT FIND TEACHER ID: {}", id);
                 return new ResponseEntity<>("NO SUCH TEACHER FOUND ON ID: "
@@ -129,8 +128,7 @@ public class TeacherController {
         try {
             ResponseTeacherDto updatedTeacher = teacherService.upgradeTeacher(viewTeacherDto);
             if(null != updatedTeacher) {
-                return new ResponseEntity<>("UPDATED TEACHER DATA:\n"
-                        + updatedTeacher, HttpStatus.OK);
+                return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("NO SUCH TEACHER FOUND ON ID: " +
                         viewTeacherDto.getId(), HttpStatus.NOT_FOUND);
