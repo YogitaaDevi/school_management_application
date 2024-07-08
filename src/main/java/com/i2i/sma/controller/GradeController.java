@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.i2i.sma.dto.ResponseGradeDto;
 import com.i2i.sma.dto.ViewGradeDto;
 import com.i2i.sma.exception.SchoolManagementException;
-import com.i2i.sma.service.GradeService;
+import com.i2i.sma.service.GradeServiceInterface;
 
 @RestController
 @RequestMapping("sma/api/v1/grades")
 public class GradeController {
 
     @Autowired
-    private GradeService gradeService;
+    private GradeServiceInterface gradeServiceInterface;
     private static final Logger logger = LoggerFactory.getLogger(GradeController.class);
 
     /**
@@ -36,7 +36,7 @@ public class GradeController {
     @GetMapping
     public ResponseEntity<?> viewGrades() {
         try {
-            List<ResponseGradeDto> Details = gradeService.fetchGradeDetails();
+            List<ResponseGradeDto> Details = gradeServiceInterface.fetchGradeDetails();
             if (null != Details) {
                 logger.info("ALL GRADES DATA ARE DISPLAYED SUCCESSFULLY");
                 return (new ResponseEntity<>(Details, HttpStatus.OK));
@@ -65,7 +65,7 @@ public class GradeController {
     @GetMapping("/{id}")
     public ResponseEntity<?> searchGrade(@PathVariable UUID id) {
         try {
-            ViewGradeDto searchedGradeDetails = gradeService.fetchGradeById(id);
+            ViewGradeDto searchedGradeDetails = gradeServiceInterface.fetchGradeById(id);
             if (null != searchedGradeDetails) {
                 logger.info("GRADE ID: {} FOUND SUCCESSFULLY", id);
                 return new ResponseEntity<>(searchedGradeDetails, HttpStatus.OK);
@@ -95,7 +95,7 @@ public class GradeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeGrade(@PathVariable UUID id) {
         try {
-            if(gradeService.isDeleteGrade(id)){
+            if(gradeServiceInterface.isDeleteGrade(id)){
                 logger.info("\nGRADE ID " + id + " REMOVED SUCCESSFULLY");
                 return new ResponseEntity<>("SUCCESSFULLY DELETED OF GRADE ID: " + id, HttpStatus.ACCEPTED);
             } else {

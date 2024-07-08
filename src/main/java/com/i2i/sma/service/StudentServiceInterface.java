@@ -1,6 +1,7 @@
 package com.i2i.sma.service;
 
 import com.i2i.sma.dto.RequestStudentDto;
+import com.i2i.sma.dto.RequestStudentUpdateDto;
 import com.i2i.sma.dto.ResponseStudentDto;
 import com.i2i.sma.dto.ViewStudentDto;
 import com.i2i.sma.exception.SchoolManagementException;
@@ -66,7 +67,7 @@ public interface StudentServiceInterface {
      * @return updated Student data corresponding to the provided ID if found.
      * @throws SchoolManagementException this occurs when anything went wrong while searching a data.
      */
-    ResponseStudentDto upgradeStudent(ViewStudentDto viewStudentDto)
+    ResponseStudentDto upgradeStudent(UUID id, RequestStudentUpdateDto requestStudentUpdateDto)
             throws SchoolManagementException;
 
     /**

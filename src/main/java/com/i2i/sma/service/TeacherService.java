@@ -1,13 +1,24 @@
 package com.i2i.sma.service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.i2i.sma.dto.*;
+import com.i2i.sma.dto.RequestGradeDto;
+import com.i2i.sma.dto.RequestTeacherDto;
+import com.i2i.sma.dto.RequestTeacherUpdateDto;
+import com.i2i.sma.dto.ResponseGradeDto;
+import com.i2i.sma.dto.ResponseTeacherDto;
+import com.i2i.sma.dto.ViewTeacherDto;
 import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.mapper.GradeMapper;
 import com.i2i.sma.mapper.TeacherMapper;
@@ -41,7 +52,8 @@ public class TeacherService implements TeacherServiceInterface {
     /**
      * {@inheritDoc TeacherServiceInterface}
      */
-    public ResponseTeacherDto addNewTeacher(RequestTeacherDto requestTeacherDto) throws SchoolManagementException {
+    public ResponseTeacherDto addNewTeacher(RequestTeacherDto requestTeacherDto)
+            throws SchoolManagementException {
         Teacher teacher = teacherMapper.requestDtoToEntity(requestTeacherDto);
         Set<RequestGradeDto> requestGrades= requestTeacherDto.getGrades();
         Set<Grade> grades = new HashSet<>();
@@ -119,23 +131,23 @@ public class TeacherService implements TeacherServiceInterface {
     /**
      * {@inheritDoc TeacherServiceInterface}
      */
-    public ResponseTeacherDto upgradeTeacher(ViewTeacherDto viewTeacherDto) throws SchoolManagementException {
+    public ResponseTeacherDto upgradeTeacher(UUID id, RequestTeacherUpdateDto requestTeacherUpdateDto) throws SchoolManagementException {
         try {
-            Optional<Teacher> teacher = teacherRepository.findById(viewTeacherDto.getId());
+            Optional<Teacher> teacher = teacherRepository.findById(id);
             if(teacher.isPresent()){
                 Teacher teacherDetails = teacher.get();
-                teacherDetails.setName(viewTeacherDto.getName());
-                teacherDetails.setSubject(viewTeacherDto.getSubject());
+                teacherDetails.setName(requestTeacherUpdateDto.getName());
+                teacherDetails.setSubject(requestTeacherUpdateDto.getSubject());
                 Set<ResponseGradeDto> grades = new HashSet<>();
                 for (Grade grade : teacherDetails.getGrades()) {
                     grades.add(gradeMapper.entityToResponseDto(grade));
                 }
-                logger.debug("PROCESS STARTED: UPDATING A TEACHER DETAILS OF ID {}", viewTeacherDto.getId());
+                logger.debug("PROCESS STARTED: UPDATING A TEACHER DETAILS OF ID {}", id);
                 return teacherMapper.entityToResponseDto(teacherRepository.save(teacherDetails), grades);
             }
         } catch (Exception e) {
             throw new SchoolManagementException("\nSOMETHING WENT WRONG WHILE UPDATING " +
-                    "THE TEACHER DETAIL OF ID " + viewTeacherDto.getId());
+                    "THE TEACHER DETAIL OF ID " + id);
         }
         return null;
     }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.i2i.sma.dto.RequestStudentDto;
+import com.i2i.sma.dto.RequestStudentUpdateDto;
 import com.i2i.sma.dto.ResponseStudentDto;
 import com.i2i.sma.dto.ViewStudentDto;
 import com.i2i.sma.exception.SchoolManagementException;
@@ -101,21 +102,21 @@ public class StudentService implements StudentServiceInterface {
     /**
      * {@inheritDoc StudentServiceInterface}
      */
-    public ResponseStudentDto upgradeStudent(ViewStudentDto viewStudentDto)
+    public ResponseStudentDto upgradeStudent(UUID id, RequestStudentUpdateDto requestStudentUpdateDto)
             throws SchoolManagementException {
         try {
-            Optional<Student> student = studentRepository.findById(viewStudentDto.getId());
+            Optional<Student> student = studentRepository.findById(id);
             if(student.isPresent()){
                 Student studentDetails = student.get();
-                studentDetails.setName(viewStudentDto.getName());
-                studentDetails.setDob(viewStudentDto.getDob());
+                studentDetails.setName(requestStudentUpdateDto.getName());
+                studentDetails.setDob(requestStudentUpdateDto.getDob());
                 logger.debug("PROCESS STARTED: UPDATING A STUDENT DETAILS OF ID {}",
-                        viewStudentDto.getId());
+                        id);
                 return studentMapper.entityToResponseDto(studentRepository.save(studentDetails));
             }
         } catch (Exception e) {
             throw new SchoolManagementException("\nSOMETHING WENT WRONG WHILE UPDATING " +
-                    "THE STUDENT DETAIL OF ID" + viewStudentDto.getId());
+                    "THE STUDENT DETAIL OF ID" + id);
         }
         return null;
     }

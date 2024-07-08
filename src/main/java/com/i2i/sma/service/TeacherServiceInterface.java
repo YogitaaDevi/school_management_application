@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.i2i.sma.dto.RequestTeacherDto;
+import com.i2i.sma.dto.RequestTeacherUpdateDto;
 import com.i2i.sma.dto.ResponseTeacherDto;
 import com.i2i.sma.dto.ViewTeacherDto;
 import com.i2i.sma.exception.SchoolManagementException;
@@ -62,7 +63,8 @@ public interface TeacherServiceInterface {
      * @return updated teacher data {@link ResponseTeacherDto}.
      * @throws SchoolManagementException this occurs when anything went wrong while searching a data.
      */
-    ResponseTeacherDto upgradeTeacher(ViewTeacherDto viewTeacherDto) throws SchoolManagementException;
+    ResponseTeacherDto upgradeTeacher(UUID id, RequestTeacherUpdateDto requestTeacherUpdateDto)
+            throws SchoolManagementException;
 
     /**
      * <p>

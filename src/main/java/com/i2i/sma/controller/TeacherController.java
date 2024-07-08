@@ -8,11 +8,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.i2i.sma.dto.*;
+import com.i2i.sma.dto.RequestTeacherDto;
+import com.i2i.sma.dto.RequestTeacherUpdateDto;
+import com.i2i.sma.dto.ResponseTeacherDto;
+import com.i2i.sma.dto.ViewTeacherDto;
 import com.i2i.sma.exception.SchoolManagementException;
-import com.i2i.sma.service.TeacherService;
+import com.i2i.sma.service.TeacherServiceInterface;
 import com.i2i.sma.utils.DataValidationUtil;
 
 /**
@@ -27,7 +37,7 @@ import com.i2i.sma.utils.DataValidationUtil;
 public class TeacherController {
     private static final Logger logger = LoggerFactory.getLogger(TeacherController.class);
     @Autowired
-    private TeacherService teacherService;
+    private TeacherServiceInterface teacherServiceInterface;
 
     /**
      * <p>
@@ -48,7 +58,7 @@ public class TeacherController {
             }
             else{
                 logger.debug("ADDING THE TEACHER DETAILS OF NAME: {}", requestTeacherDto.getName());
-                ResponseTeacherDto teacherDetails = teacherService.addNewTeacher(requestTeacherDto);
+                ResponseTeacherDto teacherDetails = teacherServiceInterface.addNewTeacher(requestTeacherDto);
                 logger.info("TEACHER DETAILS OF NAME: {} AND ID: {} ADDED SUCCESSFULLY ", teacherDetails.getName(), teacherDetails.getId());
                 return new ResponseEntity<>(teacherDetails, HttpStatus.CREATED);
             }
@@ -67,7 +77,7 @@ public class TeacherController {
     @GetMapping
     public ResponseEntity<?> viewTeachers() {
         try {
-            List<ViewTeacherDto> Details = teacherService.fetchTeachers();
+            List<ViewTeacherDto> Details = teacherServiceInterface.fetchTeachers();
             if (null != Details) {
                 logger.info("ALL TEACHERS DATA ARE DISPLAYED SUCCESSFULLY");
                 return new ResponseEntity<>(Details, HttpStatus.OK);
@@ -97,7 +107,7 @@ public class TeacherController {
     @GetMapping("/{id}")
     public ResponseEntity<?> searchTeacher(@PathVariable UUID id) {
         try {
-            ResponseTeacherDto searchedTeacher = teacherService.findTeacher(id);
+            ResponseTeacherDto searchedTeacher = teacherServiceInterface.findTeacher(id);
             if (null != searchedTeacher) {
                 logger.info("TEACHER ID: {} FOUND SUCCESSFULLY", id);
                 return new ResponseEntity<>(searchedTeacher, HttpStatus.OK);
@@ -120,18 +130,21 @@ public class TeacherController {
      * If the given id is wrong, it displays a warning message.
      * For example: provide valid student id.
      * </p>
-     * @param viewTeacherDto {@link ViewTeacherDto}
-     * @return updatedStudent {@link ResponseStudentDto} if the given id found. Else null
+     * @param
+     * id (a unique identifier for each teacher)
+     * RequestTeacherUpdateDto {@link RequestTeacherUpdateDto}
+     * @return updatedTeacher {@link ResponseTeacherDto} if the given id found. Else null
      */
-    @PutMapping
-    public ResponseEntity<?> updateTeacher(@RequestBody ViewTeacherDto viewTeacherDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTeacher(@PathVariable UUID id,
+                                           @RequestBody RequestTeacherUpdateDto requestTeacherUpdateDto) {
         try {
-            ResponseTeacherDto updatedTeacher = teacherService.upgradeTeacher(viewTeacherDto);
+            ResponseTeacherDto updatedTeacher = teacherServiceInterface.upgradeTeacher(id, requestTeacherUpdateDto);
             if(null != updatedTeacher) {
                 return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("NO SUCH TEACHER FOUND ON ID: " +
-                        viewTeacherDto.getId(), HttpStatus.NOT_FOUND);
+                        id, HttpStatus.NOT_FOUND);
             }
         } catch (SchoolManagementException e) {
             logger.error(e.getMessage(), e);
@@ -153,7 +166,7 @@ public class TeacherController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> removeTeacher(@PathVariable UUID id) {
         try {
-            if (teacherService.isDeleteTeacher(id)) {
+            if (teacherServiceInterface.isDeleteTeacher(id)) {
                 logger.info("\nTEACHER ID " + id + " REMOVED SUCCESSFULLY");
                 return new ResponseEntity<>("SUCCESSFULLY DELETED TEACHER OF ID: " + id,HttpStatus.ACCEPTED);
 
