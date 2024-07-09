@@ -35,7 +35,7 @@ import com.i2i.sma.repository.StudentRepository;
 public class StudentService implements StudentServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
     @Autowired
-    private GradeService gradeService;
+    private GradeServiceInterface gradeServiceInterface;
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -49,7 +49,7 @@ public class StudentService implements StudentServiceInterface {
     public ResponseStudentDto addStudentToGrade(RequestStudentDto requestStudentDto)
             throws SchoolManagementException {
         Student student = studentMapper.requestDtoToEntity(requestStudentDto);
-        Grade gradeDetail = gradeService.getGradeOrCreateNewGrade(requestStudentDto.getGrade());
+        Grade gradeDetail = gradeServiceInterface.getGradeOrCreateNewGrade(requestStudentDto.getGrade());
         student.setGrade(gradeDetail);
         try {
             logger.debug("PROCESS STARTED: INSERTING STUDENT DETAILS OF NAME: {} ," +
@@ -70,9 +70,8 @@ public class StudentService implements StudentServiceInterface {
             if (!students.isEmpty()) {
                 logger.debug("PROCESS STARTED: FETCHING ALL STUDENTS DETAILS");
                 List<ViewStudentDto> allStudents = new ArrayList<>();
-                for (Student student : students) {
-                    allStudents.add(studentMapper.entityToResponseViewDto(student));
-                }
+                students.forEach( student -> 
+                        allStudents.add(studentMapper.entityToResponseViewDto(student)));
                 return allStudents;
             }
         } catch (Exception e) {

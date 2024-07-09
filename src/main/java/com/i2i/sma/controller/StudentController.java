@@ -154,7 +154,6 @@ public class StudentController {
     public ResponseEntity<?> updateStudent(@RequestBody RequestStudentUpdateDto requestStudentUpdateDto,
                                            @PathVariable UUID id) {
         try {
-//            if ()
             ResponseStudentDto updatedStudent = studentServiceInterface.upgradeStudent(id, requestStudentUpdateDto);
             if(null != updatedStudent) {
                 return new ResponseEntity<>(updatedStudent, HttpStatus.OK);

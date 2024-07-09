@@ -22,8 +22,6 @@ import com.i2i.sma.mapper.GradeMapper;
 import com.i2i.sma.mapper.StudentMapper;
 import com.i2i.sma.mapper.TeacherMapper;
 import com.i2i.sma.models.Grade;
-import com.i2i.sma.models.Student;
-import com.i2i.sma.models.Teacher;
 import com.i2i.sma.repository.GradeRepository;
 
 /**
@@ -79,9 +77,7 @@ public class GradeService implements GradeServiceInterface {
             if (!grades.isEmpty()) {
                 logger.debug("PROCESS STARTED: FETCHING ALL GRADE DETAILS");
                 List<ResponseGradeDto> allGrades = new ArrayList<>();
-                for (Grade grade : grades) {
-                    allGrades.add(gradeMapper.entityToResponseDto(grade));
-                }
+                grades.forEach((grade -> allGrades.add(gradeMapper.entityToResponseDto(grade))));
                 return allGrades;
             }
         } catch (Exception e) {
@@ -100,12 +96,10 @@ public class GradeService implements GradeServiceInterface {
                 logger.debug("PROCESS STARTED: FETCHING A GRADE DETAILS OF ID {}", id);
                 Set<ViewStudentDto> students = new HashSet<>();
                 Set<ViewTeacherDto> teachers = new HashSet<>();
-                for (Student student : grade.get().getStudents()) {
-                    students.add(studentMapper.entityToResponseViewDto(student));
-                }
-                for (Teacher teacher : grade.get().getTeachers()) {
-                    teachers.add(teacherMapper.entityToResponseViewDto(teacher));
-                }
+                grade.get().getStudents().forEach((student ->
+                        students.add(studentMapper.entityToResponseViewDto(student))));
+                grade.get().getTeachers().forEach((teacher ->
+                        teachers.add(teacherMapper.entityToResponseViewDto(teacher))));
                 return (gradeMapper.entityToResponseViewDto(grade.get(), students, teachers));
             }
         } catch (Exception e) {

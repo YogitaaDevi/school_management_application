@@ -59,7 +59,9 @@ public interface TeacherServiceInterface {
      * <p>
      * This method updates a particular student record in the database
      * </p>
-     * @param viewTeacherDto {@link ViewTeacherDto}
+     * @param
+     *  id (a unique identifier for each student)
+     *  requestTeacherUpdateDto {@link RequestTeacherUpdateDto}
      * @return updated teacher data {@link ResponseTeacherDto}.
      * @throws SchoolManagementException this occurs when anything went wrong while searching a data.
      */

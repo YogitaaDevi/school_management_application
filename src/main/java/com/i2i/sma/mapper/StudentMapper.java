@@ -21,16 +21,20 @@ public class StudentMapper {
     }
 
     public ResponseStudentDto entityToResponseDto(Student student){
+        int studentAge = DateUtil.calculateDifferenceBetweenDates(student.getDob());
+
         return ResponseStudentDto.builder().id(student.getId())
                 .name(student.getName()).dob(student.getDob())
-                .age(DateUtil.calculateDifferenceBetweenDates(student.getDob()))
+                .age(studentAge)
                 .grade(gradeMapper.entityToResponseDto(student.getGrade())).build();
     }
 
     public ViewStudentDto entityToResponseViewDto(Student student){
+        int studentAge = DateUtil.calculateDifferenceBetweenDates(student.getDob());
+
         return ViewStudentDto.builder().id(student.getId())
                 .name(student.getName()).dob(student.getDob())
-                .age(DateUtil.calculateDifferenceBetweenDates(student.getDob()))
+                .age(studentAge)
                 .build();
     }
 }

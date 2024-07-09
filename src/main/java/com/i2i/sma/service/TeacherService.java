@@ -41,7 +41,7 @@ import com.i2i.sma.repository.TeacherRepository;
 public class TeacherService implements TeacherServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(TeacherService.class);
     @Autowired
-    private GradeService gradeService;
+    private GradeServiceInterface gradeServiceInterface;
     @Autowired
     private TeacherRepository teacherRepository;
     @Autowired
@@ -59,7 +59,7 @@ public class TeacherService implements TeacherServiceInterface {
         Set<Grade> grades = new HashSet<>();
         Set<ResponseGradeDto> responseGrade = new HashSet<>();
         for (RequestGradeDto requestGrade : requestGrades) {
-            Grade gradeDetail = gradeService.getGradeOrCreateNewGrade(requestGrade);
+            Grade gradeDetail = gradeServiceInterface.getGradeOrCreateNewGrade(requestGrade);
             grades.add(gradeDetail);
             responseGrade.add(gradeMapper.entityToResponseDto(gradeDetail));
         }
@@ -97,9 +97,8 @@ public class TeacherService implements TeacherServiceInterface {
             if (!teachers.isEmpty()) {
                 logger.debug("PROCESS STARTED: FETCHING ALL TEACHERS DETAILS");
                 List<ViewTeacherDto> allTeachers = new ArrayList<>();
-                for (Teacher teacher : teachers) {
-                    allTeachers.add(teacherMapper.entityToResponseViewDto(teacher));
-                }
+                teachers.forEach((teacher ->
+                        allTeachers.add(teacherMapper.entityToResponseViewDto(teacher))));
                 return allTeachers;
             }
         } catch (Exception e) {
@@ -117,9 +116,8 @@ public class TeacherService implements TeacherServiceInterface {
             if (searchedTeacher.isPresent()) {
                 logger.debug("PROCESS STARTED: FETCHING A TEACHER DETAILS OF ID {}" , id);
                 Set<ResponseGradeDto> grades = new HashSet<>();
-                for (Grade grade : searchedTeacher.get().getGrades()) {
-                    grades.add(gradeMapper.entityToResponseDto(grade));
-                }
+                searchedTeacher.get().getGrades().forEach((grade ->
+                        grades.add(gradeMapper.entityToResponseDto(grade))));
                 return teacherMapper.entityToResponseDto(searchedTeacher.get(), grades);
             }
         } catch (Exception e) {
@@ -139,9 +137,7 @@ public class TeacherService implements TeacherServiceInterface {
                 teacherDetails.setName(requestTeacherUpdateDto.getName());
                 teacherDetails.setSubject(requestTeacherUpdateDto.getSubject());
                 Set<ResponseGradeDto> grades = new HashSet<>();
-                for (Grade grade : teacherDetails.getGrades()) {
-                    grades.add(gradeMapper.entityToResponseDto(grade));
-                }
+                teacherDetails.getGrades().forEach((grade -> grades.add(gradeMapper.entityToResponseDto(grade))));
                 logger.debug("PROCESS STARTED: UPDATING A TEACHER DETAILS OF ID {}", id);
                 return teacherMapper.entityToResponseDto(teacherRepository.save(teacherDetails), grades);
             }
