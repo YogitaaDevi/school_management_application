@@ -33,10 +33,7 @@ public final class DataValidationUtil {
      * @return true if it exists within the range. Else return false.
      */
     public static boolean checkNumberRange(int num) {
-        if (num > 0 && num <= 12) {
-            return true;
-        }
-        return false;
+        return  (num > 0 && num <= 12);
     }
 }
     

@@ -25,8 +25,7 @@ public final class DateUtil {
      */
     public static int calculateDifferenceBetweenDates(LocalDate date) {
         LocalDate currentDate = LocalDate.now();
-        int calculatedDifference = Period.between(date, currentDate).getYears();
-        return calculatedDifference;
+        return Period.between(date, currentDate).getYears();
     }
 
     /**
@@ -40,11 +39,8 @@ public final class DateUtil {
      */
     public static boolean isValidateDate(LocalDate date) {
         try {
-            if ((!date.isAfter(LocalDate.now())) &&
-                    (!date.isBefore(LocalDate.now().minus(20, ChronoUnit.YEARS)))) {
-                return true;
-            }
-            return false;
+            return (!date.isAfter(LocalDate.now())) &&
+                    (!date.isBefore(LocalDate.now().minus(20, ChronoUnit.YEARS)));
         } catch (DateTimeParseException e) {
             return false;
         }
