@@ -20,7 +20,7 @@ import com.i2i.sma.exception.SchoolManagementException;
 import com.i2i.sma.service.GradeServiceInterface;
 
 @RestController
-@RequestMapping("sma/api/v1/grades")
+@RequestMapping("v1/grades")
 public class GradeController {
 
     @Autowired

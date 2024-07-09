@@ -26,3 +26,13 @@ spring.datasource.username=
 # This variable refers the users to mention the database password
 spring.datasource.password=
 
+# This variable refers the logging level of the log file
+# The value must be from any of below 5 types of operations:
+#     fatal, error, warn, info, debug and trace
+logging.level.root=
+
+# This variable refers to the log file name where all logging details are stored
+logging.file.name=
+
+# This variable refers to the path by which the application will be accessed by the end users
+server.servlet.context-path=

@@ -35,7 +35,7 @@ import com.i2i.sma.utils.DateUtil;
  * </p>
  */
 @RestController
-@RequestMapping("sma/api/v1/students")
+@RequestMapping("v1/students")
 public class StudentController {
     private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
     @Autowired

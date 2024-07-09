@@ -33,7 +33,7 @@ import com.i2i.sma.utils.DataValidationUtil;
  * </p>
  */
 @RestController
-@RequestMapping("sma/api/v1/teachers")
+@RequestMapping("v1/teachers")
 public class TeacherController {
     private static final Logger logger = LoggerFactory.getLogger(TeacherController.class);
     @Autowired
